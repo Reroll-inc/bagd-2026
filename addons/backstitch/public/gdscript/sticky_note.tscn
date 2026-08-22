@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b853277vwgxxm"]
+[gd_scene format=3 uid="uid://b853277vwgxxm"]
 
 [ext_resource type="Script" uid="uid://bsvqjddqcc6vw" path="res://addons/backstitch/public/gdscript/sticky_note.gd" id="1_rpp8a"]
 
@@ -17,10 +17,10 @@ shadow_color = Color(0, 0, 0, 0.0666667)
 shadow_size = 2
 shadow_offset = Vector2(2, 2)
 
-[node name="StickyNote" type="Node2D"]
+[node name="StickyNote" type="Node2D" unique_id=614448365]
 script = ExtResource("1_rpp8a")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=332608642]
 offset_left = -263.0
 offset_top = -222.0
 offset_right = 262.0
@@ -28,7 +28,7 @@ offset_bottom = 230.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_rpp8a")
 metadata/_edit_use_anchors_ = true
 
-[node name="Content" type="Label" parent="."]
+[node name="Content" type="Label" parent="." unique_id=1540654282]
 unique_name_in_owner = true
 offset_left = -247.0
 offset_top = -204.0
