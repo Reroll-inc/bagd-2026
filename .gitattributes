@@ -1,0 +1,83 @@
+# ---------------------------------------------------------------------------
+# 1. LINE ENDING STABILIZATION
+# ---------------------------------------------------------------------------
+# Force LF line endings for all text/code files to prevent cross-platform diff issues.
+* text=auto eol=lf
+
+# Explicitly mark Godot text formats as text
+*.godot text
+*.tscn text
+*.tres text
+*.gd text
+*.gdshader text
+
+# Windows-specific files should keep CRLF
+*.bat eol=crlf
+*.sln eol=crlf
+*.csproj eol=crlf
+
+# ---------------------------------------------------------------------------
+# 2. GIT LFS (LARGE FILE STORAGE) FOR BINARY ASSETS
+# ---------------------------------------------------------------------------
+# 3D Assets
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.obj filter=lfs diff=lfs merge=lfs -text
+*.gltf filter=lfs diff=lfs merge=lfs -text
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.dae filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+
+# 2D Textures and Images
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.bmp filter=lfs diff=lfs merge=lfs -text
+*.svg filter=lfs diff=lfs merge=lfs -text
+*.webp filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+*.hdr filter=lfs diff=lfs merge=lfs -text
+*.ico filter=lfs diff=lfs merge=lfs -text
+
+# Audio Files
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.flac filter=lfs diff=lfs merge=lfs -text
+
+# Video Files
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mkv filter=lfs diff=lfs merge=lfs -text
+*.avi filter=lfs diff=lfs merge=lfs -text
+*.ogv filter=lfs diff=lfs merge=lfs -text
+
+# Fonts
+*.ttf filter=lfs diff=lfs merge=lfs -text
+*.otf filter=lfs diff=lfs merge=lfs -text
+*.woff filter=lfs diff=lfs merge=lfs -text
+*.woff2 filter=lfs diff=lfs merge=lfs -text
+
+# Godot Binary Formats (if you choose to save scenes/resources as binary)
+*.res filter=lfs diff=lfs merge=lfs -text
+*.scn filter=lfs diff=lfs merge=lfs -text
+
+# Compiled Binaries & Libraries
+*.dll filter=lfs diff=lfs merge=lfs -text
+*.so filter=lfs diff=lfs merge=lfs -text
+*.dylib filter=lfs diff=lfs merge=lfs -text
+*.a filter=lfs diff=lfs merge=lfs -text
+*.lib filter=lfs diff=lfs merge=lfs -text
+*.wasm filter=lfs diff=lfs merge=lfs -text
+
+# Miscellaneous Packaged Assets
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.tar filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.7z filter=lfs diff=lfs merge=lfs -text
+*.pck filter=lfs diff=lfs merge=lfs -text
+
+# ---------------------------------------------------------------------------
+# 3. GITHUB/LINGUIST LANGUAGE DETECTION
+# ---------------------------------------------------------------------------
+# Correctly identify Godot Shader files as GLSL or similar for syntax highlighting
+*.gdshader linguist-language=GLSL
