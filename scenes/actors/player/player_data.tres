@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://doc7abp7fxlpi"]
+
+[ext_resource type="Script" uid="uid://lrwoxiown1d1" path="res://scenes/resource_definitions/player_data.gd" id="1_krxoq"]
+
+[resource]
+script = ExtResource("1_krxoq")
+dash_cooldown = 2.0
+jump_height = -350.0
+gravity = 18.0
+movement_max_speed = 140.0

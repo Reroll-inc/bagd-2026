@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://ceykjxp5q6et4"]
+
+[ext_resource type="PackedScene" uid="uid://dkw2wps2wylkl" path="res://scenes/actors/player/player.tscn" id="1_jbqir"]
+[ext_resource type="Texture2D" uid="uid://bmo7jf1bgk67" path="res://assets/icon.svg" id="1_yautc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(1161, 43)
+
+[node name="TestLevel" type="Node2D" unique_id=1092939748]
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=233513849]
+position = Vector2(585, 386)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=143544271]
+shape = SubResource("RectangleShape2D_g4v7s")
+debug_color = Color(0.5019608, 0.54509807, 0.5647059, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="Floor" unique_id=250094818]
+modulate = Color(0.49411765, 0, 1, 1)
+scale = Vector2(10.20983, 0.33815357)
+texture = ExtResource("1_yautc")
+
+[node name="Platform" type="StaticBody2D" parent="." unique_id=1483584540]
+position = Vector2(625, 293)
+scale = Vector2(0.040000618, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform" unique_id=1880380897]
+shape = SubResource("RectangleShape2D_g4v7s")
+debug_color = Color(0.5019608, 0.54509807, 0.5647059, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="Platform" unique_id=1352587728]
+modulate = Color(0.627451, 0.0627451, 1, 1)
+scale = Vector2(8.959999, 0.3355933)
+texture = ExtResource("1_yautc")
+
+[node name="CharacterBody2D" parent="." unique_id=366121222 instance=ExtResource("1_jbqir")]
+position = Vector2(320, 295)
+print_state = false
