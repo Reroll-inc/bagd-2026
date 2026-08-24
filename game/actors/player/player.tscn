@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://dkw2wps2wylkl"]
+
+[ext_resource type="Script" uid="uid://b62upqybubksd" path="res://game/actors/player/player.gd" id="1_l17oj"]
+[ext_resource type="Texture2D" uid="uid://bmo7jf1bgk67" path="res://assets/icon.svg" id="1_xjuxa"]
+[ext_resource type="Script" uid="uid://bdk53el3x7nfb" path="res://game/actors/player/wand_aimer.gd" id="3_em52k"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(158.40248, 183.56775)
+
+[node name="Player" type="CharacterBody2D" unique_id=366121222]
+script = ExtResource("1_l17oj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1128084869]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_xjuxa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1495960334]
+position = Vector2(-7.003546e-07, 0)
+scale = Vector2(0.20201702, 0.17432255)
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="WandPivot" type="Node2D" parent="." unique_id=1546918091]
+position = Vector2(0, -8)
+script = ExtResource("3_em52k")
+
+[node name="Muzzle" type="Marker2D" parent="WandPivot" unique_id=2116703451]
+position = Vector2(22, 0)
+
+[node name="WandSprite" type="Sprite2D" parent="WandPivot" unique_id=511579129]
+modulate = Color(1, 0, 0.05882353, 1)
+position = Vector2(17, 0)
+scale = Vector2(0.21687773, 0.008688195)
+texture = ExtResource("1_xjuxa")

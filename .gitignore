@@ -20,6 +20,7 @@ mono_crash.*.json
 build/
 builds/
 .backstitch/
+**/backstitch/bin/~*
 
 *.tmp
 .godotlauncher

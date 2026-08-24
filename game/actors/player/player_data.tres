@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://doc7abp7fxlpi"]
+
+[ext_resource type="Script" uid="uid://lrwoxiown1d1" path="res://game/resource_definitions/player_data.gd" id="1_krxoq"]
+
+[resource]
+script = ExtResource("1_krxoq")
+print_state = true

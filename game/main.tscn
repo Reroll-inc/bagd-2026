@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bsvual6wovra0"]
+
+[node name="Main" type="Node" unique_id=790870284]
+
+[node name="GUI" type="CanvasLayer" parent="." unique_id=1355740450]
+process_mode = 3
