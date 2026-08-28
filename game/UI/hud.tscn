@@ -1,0 +1,246 @@
+[gd_scene format=3 uid="uid://chl8nt8rp0y0o"]
+
+[ext_resource type="Script" uid="uid://dp3t2uaw7gxi2" path="res://game/UI/hud.gd" id="1_mndx4"]
+[ext_resource type="Texture2D" uid="uid://bb8qslfml8fed" path="res://game/UI/Assets/panelInset_beige.png" id="1_qkmtx"]
+[ext_resource type="Texture2D" uid="uid://c2hf5drluab73" path="res://game/UI/Assets/buttonRound_beige.png" id="2_h0o6u"]
+[ext_resource type="Texture2D" uid="uid://bbie2a8sl2ugb" path="res://game/UI/Assets/buttonSquare_grey.png" id="3_2h1nn"]
+[ext_resource type="Texture2D" uid="uid://uq7claghu514" path="res://game/UI/Assets/iconCircle_grey.png" id="4_mndx4"]
+[ext_resource type="Texture2D" uid="uid://7uclpouhhim" path="res://game/UI/Assets/buttonSquare_blue.png" id="5_ckab8"]
+[ext_resource type="Texture2D" uid="uid://dbpb4l78qqfet" path="res://game/UI/Assets/iconCircle_blue.png" id="6_w4ldi"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ciqd4"]
+texture = ExtResource("3_2h1nn")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t5q27"]
+texture = ExtResource("5_ckab8")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[node name="Hud" type="Control" unique_id=685220952]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mndx4")
+
+[node name="TopBar" type="Control" parent="." unique_id=1865868749]
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="PowerMeter" type="VBoxContainer" parent="TopBar" unique_id=117126982]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 32.0
+offset_right = 88.0
+offset_bottom = 72.0
+theme_override_constants/separation = 8
+
+[node name="LabelPoderes" type="Label" parent="TopBar/PowerMeter" unique_id=503754059]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Poderes ganados"
+
+[node name="EnergyTrack" type="NinePatchRect" parent="TopBar/PowerMeter" unique_id=99118357]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 28)
+layout_mode = 2
+texture = ExtResource("1_qkmtx")
+patch_margin_left = 18
+patch_margin_top = 18
+patch_margin_right = 18
+patch_margin_bottom = 18
+
+[node name="EnergyFill" type="ColorRect" parent="TopBar/PowerMeter/EnergyTrack" unique_id=1609731963]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 44.0
+offset_bottom = 34.0
+color = Color(0.54901963, 0.4, 1, 1)
+
+[node name="Timer" type="NinePatchRect" parent="TopBar" unique_id=1557072085]
+layout_mode = 0
+offset_left = 864.0
+offset_top = 24.0
+offset_right = 1056.0
+offset_bottom = 104.0
+texture = ExtResource("2_h0o6u")
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+
+[node name="TimerLabel" type="Label" parent="TopBar/Timer" unique_id=861256959]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.14901961, 0.101960786, 0.019607844, 1)
+theme_override_font_sizes/font_size = 40
+text = "01:42"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlMeter" type="VBoxContainer" parent="TopBar" unique_id=1805286598]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1552.0
+offset_top = 32.0
+offset_right = 1592.0
+offset_bottom = 72.0
+theme_override_constants/separation = 8
+
+[node name="LabelControl" type="Label" parent="TopBar/ControlMeter" unique_id=567316634]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Energía disponible"
+
+[node name="MeterTrack" type="NinePatchRect" parent="TopBar/ControlMeter" unique_id=1790919938]
+custom_minimum_size = Vector2(320, 28)
+layout_mode = 2
+texture = ExtResource("1_qkmtx")
+patch_margin_left = 18
+patch_margin_top = 18
+patch_margin_right = 18
+patch_margin_bottom = 18
+
+[node name="SafeZone" type="ColorRect" parent="TopBar/ControlMeter/MeterTrack" unique_id=1778325338]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 203.0
+offset_bottom = 34.0
+color = Color(0.34901962, 0.7490196, 0.4509804, 1)
+
+[node name="RiskZone" type="ColorRect" parent="TopBar/ControlMeter/MeterTrack" unique_id=915332369]
+layout_mode = 0
+offset_left = 207.0
+offset_top = 4.0
+offset_right = 316.0
+offset_bottom = 34.0
+color = Color(0.9019608, 0.4509804, 0.29803923, 1)
+
+[node name="Marker" type="ColorRect" parent="TopBar/ControlMeter/MeterTrack" unique_id=1292440369]
+layout_mode = 0
+offset_left = 203.0
+offset_right = 207.0
+offset_bottom = 39.0
+
+[node name="ScaleLabels" type="HBoxContainer" parent="TopBar/ControlMeter" unique_id=64736311]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="Label0" type="Label" parent="TopBar/ControlMeter/ScaleLabels" unique_id=1112079464]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="LabelN" type="Label" parent="TopBar/ControlMeter/ScaleLabels" unique_id=570488673]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "n"
+horizontal_alignment = 2
+
+[node name="LabelM" type="Label" parent="TopBar/ControlMeter/ScaleLabels" unique_id=1723903027]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "m"
+horizontal_alignment = 2
+
+[node name="BottomBar" type="HBoxContainer" parent="." unique_id=1818778733]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -180.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ToolEscoba" type="Button" parent="BottomBar" unique_id=332049446]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_ciqd4")
+
+[node name="Icon" type="TextureRect" parent="BottomBar/ToolEscoba" unique_id=1434753840]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 43.0
+offset_right = 71.0
+offset_bottom = 83.0
+texture = ExtResource("4_mndx4")
+
+[node name="ToolTrapo" type="Button" parent="BottomBar" unique_id=1942477336]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_t5q27")
+
+[node name="Icon" type="TextureRect" parent="BottomBar/ToolTrapo" unique_id=1426575534]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 43.0
+offset_right = 71.0
+offset_bottom = 83.0
+texture = ExtResource("6_w4ldi")
+
+[node name="ToolPlumero" type="Button" parent="BottomBar" unique_id=1699830209]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_ciqd4")
+
+[node name="Icon" type="TextureRect" parent="BottomBar/ToolPlumero" unique_id=505523879]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 43.0
+offset_right = 71.0
+offset_bottom = 83.0
+texture = ExtResource("4_mndx4")
+
+[node name="ToolPistola" type="Button" parent="BottomBar" unique_id=265041961]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_ciqd4")
+
+[node name="Icon" type="TextureRect" parent="BottomBar/ToolPistola" unique_id=1337781093]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 43.0
+offset_right = 71.0
+offset_bottom = 83.0
+texture = ExtResource("4_mndx4")
+
+[node name="EndPanel" type="CenterContainer" parent="." unique_id=582162589]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EndLabel" type="Label" parent="EndPanel" unique_id=1034036520]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1

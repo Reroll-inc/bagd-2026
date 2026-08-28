@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://p7fc4b8fm41i"]
+
+[ext_resource type="Script" uid="uid://bh1iwocd0ugql" path="res://game/actors/dirt/dirt.gd" id="1_5x3ro"]
+[ext_resource type="Resource" uid="uid://4wn7lemslgm5" path="res://game/actors/dirt/dust.tres" id="2_lvidr"]
+[ext_resource type="Texture2D" uid="uid://d2c7phh4ja58i" path="res://assets/placeholder/dust.png" id="3_lvidr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(55, 34.5)
+
+[node name="Dirt" type="Area2D" unique_id=607420559]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_5x3ro")
+data = ExtResource("2_lvidr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1655475435]
+texture = ExtResource("3_lvidr")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=84803624]
+position = Vector2(-0.5, -0.25)
+shape = SubResource("RectangleShape2D_g4v7s")

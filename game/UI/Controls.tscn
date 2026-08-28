@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://bynrtdl5pvqk4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_73mxt"]
+bg_color = Color(0.21960784, 0.18039216, 0.29803923, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5019608, 0.4, 0.6509804, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asnww"]
+bg_color = Color(0.6509804, 0.5019608, 1, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[node name="Controls" type="Control" unique_id=1972572817]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=2030736219]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.039215688, 0.03137255, 0.078431375, 1)
+
+[node name="TitleSubTiitle" type="VBoxContainer" parent="." unique_id=61427914]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelsMargin" type="MarginContainer" parent="TitleSubTiitle" unique_id=2141121729]
+layout_mode = 2
+theme_override_constants/margin_top = 44
+
+[node name="Titulo" type="Label" parent="TitleSubTiitle" unique_id=1699297723]
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
+theme_override_font_sizes/font_size = 64
+text = "CONTROLS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonBack" type="Button" parent="." unique_id=175233458]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 80.0
+offset_top = 890.0
+offset_right = 149.0
+offset_bottom = 959.0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_73mxt")
+theme_override_styles/hover = SubResource("StyleBoxFlat_asnww")
+text = "←"
+icon_alignment = 1

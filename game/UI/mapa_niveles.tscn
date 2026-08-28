@@ -1,0 +1,420 @@
+[gd_scene format=3 uid="uid://cc3sm0hcjrrun"]
+
+[ext_resource type="Texture2D" uid="uid://cyax7glij0i2e" path="res://assets/player-animations/idle/idle0000.png" id="1_51qut"]
+[ext_resource type="Texture2D" uid="uid://bev0llxbsvid4" path="res://game/UI/Assets/moon_half.png" id="1_4115r"]
+[ext_resource type="Texture2D" uid="uid://dv1huhrbloom4" path="res://game/UI/Assets/checkmark.png" id="2_51qut"]
+[ext_resource type="Texture2D" uid="uid://hgll5m577xfj" path="res://game/UI/Assets/forward.png" id="4_h20y7"]
+[ext_resource type="Texture2D" uid="uid://3671xalivc45" path="res://game/UI/Assets/locked.png" id="5_2kffb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ciqd4"]
+bg_color = Color(0.21960784, 0.18039216, 0.29803923, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5019608, 0.4, 0.6509804, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2kffb"]
+bg_color = Color(0.6509804, 0.5019608, 1, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2onv"]
+bg_color = Color(0.81960785, 0.61960787, 0.21960784, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.54901963, 0.4, 0.12156863, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_51qut"]
+bg_color = Color(0.8784314, 0.6745098, 0.2901961, 0.24313726)
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4115r"]
+bg_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h20y7"]
+bg_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r3ojs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_00y2f"]
+bg_color = Color(0.54901963, 0.4, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.34901962, 0.21960784, 0.7490196, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mkbl"]
+bg_color = Color(0.34901962, 0.21960784, 0.7490196, 0.33333334)
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m27sd"]
+bg_color = Color(0.34901962, 0.21960784, 0.7490196, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3pta4"]
+bg_color = Color(0.34901962, 0.21960784, 0.7490196, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1maob"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1maob"]
+bg_color = Color(0.2, 0.18039216, 0.25882354, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.34901962, 0.29803923, 0.41960785, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2m6iy"]
+bg_color = Color(0.34901962, 0.21960784, 0.7490196, 0.33333334)
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pffj"]
+bg_color = Color(0.34901962, 0.21960784, 0.7490196, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c6bk3"]
+bg_color = Color(0.34901962, 0.21960784, 0.7490196, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qu1p0"]
+bg_color = Color(0.2, 0.18039216, 0.25882354, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MapaNiveles" type="Control" unique_id=774695703]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=1512590057]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.039215688, 0.03137255, 0.078431375, 1)
+
+[node name="Luna" type="TextureRect" parent="Fondo" unique_id=53932325]
+texture_filter = 1
+layout_mode = 0
+offset_left = 230.0
+offset_top = 150.0
+offset_right = 330.0
+offset_bottom = 250.0
+texture = ExtResource("1_4115r")
+stretch_mode = 5
+
+[node name="TextureRect" type="TextureRect" parent="Fondo" unique_id=2135454218]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 466.0
+offset_top = 390.0
+offset_right = -1054.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_51qut")
+stretch_mode = 5
+
+[node name="TorreBorde" type="Polygon2D" parent="." unique_id=386101473]
+position = Vector2(22.08789, 19.805012)
+scale = Vector2(1.0236801, 1.1087081)
+color = Color(0.4, 0.29803923, 0.54901963, 1)
+polygon = PackedVector2Array(1096.9365, 1001.34106, 1144, 216, 1313.6454, 31.74414, 1466.5568, 211.0281, 1566.8099, 990.3645)
+
+[node name="Torre" type="Polygon2D" parent="." unique_id=1760641208]
+position = Vector2(70.00001, 38)
+scale = Vector2(0.9875, 1.0932378)
+color = Color(0.16078432, 0.12156863, 0.21960784, 1)
+polygon = PackedVector2Array(1096.9365, 1001.34106, 1144, 216, 1313.6454, 31.74414, 1466.5568, 211.0281, 1566.8099, 990.3645)
+
+[node name="Titulo" type="Label" parent="." unique_id=1207622998]
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 145.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
+theme_override_font_sizes/font_size = 44
+text = "Mapa de niveles"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="." unique_id=98648438]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 128.0
+offset_bottom = 187.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.7490196, 0.72156864, 0.8509804, 1)
+theme_override_font_sizes/font_size = 20
+text = "elegí el próximo piso a limpiar
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonBack" type="Button" parent="." unique_id=1628776968]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 80.0
+offset_top = 890.0
+offset_right = 149.0
+offset_bottom = 959.0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_ciqd4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2kffb")
+text = "←"
+icon_alignment = 1
+
+[node name="Piso1" type="Control" parent="." unique_id=1230506204]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1300.0
+offset_top = 850.0
+offset_right = -510.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelComplete" type="Button" parent="Piso1" unique_id=36323334]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/icon_pressed_color = Color(0.72156864, 0.5294118, 0.18039216, 1)
+theme_override_colors/icon_hover_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_n2onv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_51qut")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_4115r")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_h20y7")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_r3ojs")
+icon = ExtResource("2_51qut")
+
+[node name="Label" type="Label" parent="Piso1" unique_id=1075646170]
+layout_mode = 0
+offset_left = -311.0
+offset_top = -28.0
+offset_right = -235.0
+offset_bottom = 5.0
+theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Piso 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelEstado" type="Label" parent="Piso1" unique_id=1964089299]
+layout_mode = 0
+offset_left = -365.0
+offset_top = 10.0
+offset_right = -183.0
+offset_bottom = 43.0
+theme_override_colors/font_color = Color(0.8509804, 0.6509804, 0.2509804, 1)
+theme_override_font_sizes/font_size = 16
+text = "Completado"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Piso2" type="Control" parent="." unique_id=566903296]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1329.0
+offset_top = 593.0
+offset_right = -481.0
+offset_bottom = -377.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelNext" type="Button" parent="Piso2" unique_id=1729534978]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/icon_pressed_color = Color(0.72156864, 0.5294118, 0.18039216, 1)
+theme_override_colors/icon_hover_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_00y2f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7mkbl")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_m27sd")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_3pta4")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1maob")
+icon = ExtResource("4_h20y7")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Piso2" unique_id=279082744]
+layout_mode = 0
+offset_left = -350.0
+offset_top = 9.0
+offset_right = -268.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Piso 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelEstado" type="Label" parent="Piso2" unique_id=1513249349]
+layout_mode = 0
+offset_left = -404.0
+offset_top = 47.0
+offset_right = -222.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(0.6509804, 0.5019608, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Disponible"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Piso3" type="Control" parent="." unique_id=730054268]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1317.0
+offset_top = 339.0
+offset_right = -493.0
+offset_bottom = -631.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelLocked" type="Button" parent="Piso3" unique_id=1362983314]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -7.0
+offset_right = 7.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/icon_normal_color = Color(0.34901962, 0.29803923, 0.41960785, 1)
+theme_override_colors/icon_pressed_color = Color(0.34901962, 0.29803923, 0.41960785, 1)
+theme_override_colors/icon_hover_color = Color(0.34901962, 0.29803923, 0.41960785, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.34901962, 0.29803923, 0.41960785, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_1maob")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2m6iy")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_5pffj")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_c6bk3")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_qu1p0")
+disabled = true
+icon = ExtResource("5_2kffb")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Label" type="Label" parent="Piso3" unique_id=1564402625]
+layout_mode = 0
+offset_left = -350.0
+offset_top = 9.0
+offset_right = -268.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Piso 3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelEstado" type="Label" parent="Piso3" unique_id=1758264098]
+layout_mode = 0
+offset_left = -404.0
+offset_top = 47.0
+offset_right = -222.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(0.6, 0.5803922, 0.6784314, 1)
+theme_override_font_sizes/font_size = 16
+text = "Bloqueado"
+horizontal_alignment = 1
+vertical_alignment = 1
