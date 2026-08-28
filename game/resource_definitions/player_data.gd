@@ -22,4 +22,3 @@ class_name PlayerData
 @export var print_state: bool = false
 @export var print_animation: bool = false
 
-

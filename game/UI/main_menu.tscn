@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ms1svicuhsu2"]
 
-[ext_resource type="Texture2D" uid="uid://bev0llxbsvid4" path="res://game/UI/Assets/moon_half.png" id="1_y0xsx"]
+[ext_resource type="Script" uid="uid://cejl02jwlgbha" path="res://game/ui/main_menu.gd" id="1_hjbl3"]
+[ext_resource type="Texture2D" uid="uid://bev0llxbsvid4" path="res://game/ui/Assets/moon_half.png" id="1_y0xsx"]
 [ext_resource type="Texture2D" uid="uid://cyax7glij0i2e" path="res://assets/player-animations/idle/idle0000.png" id="2_xjdrg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y0xsx"]
@@ -63,6 +64,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_hjbl3")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1381963867]
 layout_mode = 1
@@ -150,6 +152,7 @@ theme_override_constants/margin_left = 66
 theme_override_constants/margin_top = 66
 
 [node name="ToPlay" type="Button" parent="Actions" unique_id=1183597991]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -171,6 +174,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="ToControls" type="Button" parent="Actions" unique_id=1430914809]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 100)
 custom_maximum_size = Vector2(300, 70)
 layout_mode = 2

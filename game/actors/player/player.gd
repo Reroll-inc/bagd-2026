@@ -10,16 +10,16 @@ const ACTION_RIGHT: StringName = &"move_right"
 const ACTION_JUMP: StringName = &"jump"
 @export var properties: PlayerData = preload("res://game/actors/player/player_data.tres")
 
-#Nombres de los clips del SpriteFrames. Hoy el recurso solo tiene "idle": los otros
-#tres se piden igual y caen al fallback hasta que exista el arte.
+# Nombres de los clips del SpriteFrames. Hoy el recurso solo tiene "idle": los otros
+# tres se piden igual y caen al fallback hasta que exista el arte.
 const ANIM_IDLE: StringName = &"idle"
 const ANIM_RUN: StringName = &"run"
 const ANIM_JUMP: StringName = &"jump"
 const ANIM_FALL: StringName = &"fall"
 
-#Debajo de esta velocidad la maga cuenta como quieta. Existe porque la fricción
-#deja residuos de fracciones de píxel: sin umbral, el clip parpadearía entre idle y
-#run durante el frenado.
+# 📖 Debajo de esta velocidad la maga cuenta como quieta. Existe porque la fricción
+# deja residuos de fracciones de píxel: sin umbral, el clip parpadearía entre idle y
+# run durante el frenado.
 const IDLE_SPEED_THRESHOLD: float = 10.0
 
 enum State {
@@ -35,11 +35,12 @@ var facing_direction: int = 1 # 1 derecha, -1 izquierda.
 var _current_anim: StringName = &""
 var _last_wanted_anim: StringName = &""
 
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _physics_process(delta: float) -> void:
-	_update_facing() 
-	
+	_update_facing()
+
 	match _state:
 		State.GROUNDED:
 			_state_grounded(delta)
@@ -47,7 +48,11 @@ func _physics_process(delta: float) -> void:
 			_state_airborne(delta)
 
 	move_and_slide()
+
+	# Va DESPUÉS de move_and_slide(): recién ahí velocity refleja los choques del frame.
+	# Antes, un salto contra el techo se vería como "subiendo" durante un frame.
 	_update_animation()
+
 # ═══════════════ ESTADOS ═══════════════
 
 
@@ -114,15 +119,21 @@ func _update_facing() -> void:
 	facing_direction = 1 if offset_x > 0.0 else -1
 	sprite.flip_h = facing_direction > 0
 
+
 # ═══════════════ ANIMACIÓN ═══════════════
 
 
-#Traductor entre gameplay y presentación: la máquina de estados decide QUÉ está
-#haciendo la maga, esto decide CÓMO se ve.
+# 🧩 Traductor entre gameplay y presentación: la máquina de estados decide QUÉ está
+# haciendo la maga, esto decide CÓMO se ve. Están separados para que sumar un clip no
+# obligue a tocar la física, ni al revés. Sin esta división, cada animación nueva
+# significaría meter mano en _state_grounded() y _state_airborne().
 func _update_animation() -> void:
 	var wanted: StringName = _wanted_animation()
 
 	# has_animation() es lo que hace seguro pedir un clip que todavía no existe:
+	# play() con un nombre inexistente tira error y deja el sprite donde estaba.
+	# Este es el andamiaje: el día que entre el arte de correr, se agrega "run" al
+	# SpriteFrames y empieza a sonar sin tocar una línea de acá.
 	var actual: StringName = wanted
 	if not sprite.sprite_frames.has_animation(wanted):
 		actual = ANIM_IDLE
@@ -136,8 +147,8 @@ func _update_animation() -> void:
 		else:
 			print("[Player] anim → ", wanted, "  (no existe, cae a ", actual, ")")
 
-	#play() solo cuando el clip CAMBIA. Llamarlo todos los frames es la forma
-	#clásica de dejar una animación congelada para siempre en su primer cuadro.
+	# 📖 play() solo cuando el clip CAMBIA. Llamarlo todos los frames es la forma
+	# clásica de dejar una animación congelada para siempre en su primer cuadro.
 	if actual == _current_anim:
 		return
 

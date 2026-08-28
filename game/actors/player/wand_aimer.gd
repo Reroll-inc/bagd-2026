@@ -1,11 +1,22 @@
 extends Node2D
 ##apunta la varita hacia el mouse, limitada a un arco alrededor de la horizontal
 
-#El arco ya no arranca en 0°: con la maga de 256px, apuntar recto al techo hace
-#que la varita barra el cuerpo entero. Quedarse cerca de 90° la mantiene al costado.
-#Son @export para que se balanceen desde el Inspector, sin tocar código.
+# 0° = vertical hacia el Techo
+# 90° = horizontal
+# 120° = el piso adelante del mago
+#
+# 📖 El arco ya no arranca en 0°: con la maga de 256px, apuntar recto al techo hace
+# que la varita barra el cuerpo entero. Quedarse cerca de 90° la mantiene al costado.
+# Son @export para que se balanceen desde el Inspector, sin tocar código.
 @export_range(0.0, 180.0, 1.0) var arc_min_deg: float = 55.0
 @export_range(0.0, 180.0, 1.0) var arc_max_deg: float = 125.0
+
+# 📖 Dónde nace la varita, medido desde el centro del player. La x es "hacia ADELANTE"
+# y va siempre POSITIVA: el código la espeja según facing_direction, porque flip_h
+# espeja el dibujo del sprite pero no mueve ningún nodo hijo ni hermano.
+# ⚠️ Esto pisa el position del nodo en cada frame: moverlo en el editor no hace nada,
+# el valor que manda es este. Se calibra corriendo el juego, no mirando la escena.
+@export var hand_offset: Vector2 = Vector2(24.0, 0.0)
 
 const ACTION_CAST: StringName = &"cast"
 
@@ -13,8 +24,6 @@ const ACTION_CAST: StringName = &"cast"
 #no frena el juego leyendo del disco. El costo se paga una vez, al arrancar.
 const PROJECTILE_SCENE: PackedScene = preload("res://game/actors/projectile/projectile.tscn")
 
-# Dónde nace la varita, medido desde el centro del player.
-@export var hand_offset: Vector2 = Vector2(24.0, 0.0)
 
 @export var spell: SpellData
 
@@ -42,7 +51,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	var facing: int = player.facing_direction
 
-	# La mano cambia de lado cuando la maga voltea.
+	# La mano cambia de lado cuando la maga voltea. Va ANTES de leer global_position:
+	# el pivote tiene que estar en su lugar definitivo antes de medir hacia el mouse.
 	position = Vector2(hand_offset.x * facing, hand_offset.y)
 
 	var to_mouse: Vector2 = get_global_mouse_position() - global_position
