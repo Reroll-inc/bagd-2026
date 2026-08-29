@@ -4,4 +4,4 @@
 
 [resource]
 script = ExtResource("1_krxoq")
-move_speed = 300.0
+print_animation = true

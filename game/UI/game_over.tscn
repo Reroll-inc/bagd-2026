@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cb530kk5iqkng"]
 
+[ext_resource type="Script" uid="uid://bmgs1cfbgk5af" path="res://game/ui/game_over.gd" id="1_ca4ac"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iu843"]
 bg_color = Color(0.54901963, 0.4, 1, 1)
 border_width_left = 4
@@ -60,6 +62,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ca4ac")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=206907047]
 layout_mode = 1
@@ -123,6 +126,7 @@ theme_override_constants/margin_left = 66
 theme_override_constants/margin_top = 66
 
 [node name="ToPlayAgain" type="Button" parent="Actions" unique_id=836834968]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -144,6 +148,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="ToMenu" type="Button" parent="Actions" unique_id=1009193727]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 100)
 custom_maximum_size = Vector2(300, 70)
 layout_mode = 2

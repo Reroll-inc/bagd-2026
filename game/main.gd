@@ -9,24 +9,35 @@ extends Node
 ##el nivel y nada más: la interfaz sobrevive intacta. El día que haya menú, selección
 ##de niveles o árbol de talentos, este es el nodo que los va a coordinar.
 
-##Nivel que se carga al arrancar. Cambialo en el Inspector para probar otro.
+##Nivel que se carga al jugar. Cambialo en el Inspector para probar otro.
 @export var level_scene: PackedScene
 
-##Segundos que queda el cartel de derrota antes de reiniciar solo.
-@export_range(0.5, 10.0, 0.1) var restart_delay: float = 3.0
+##Pantalla de título. Es la primera cosa que ve el jugador.
+@export var main_menu_scene: PackedScene
+
+##Pantalla de controles, a la que se llega desde el título.
+@export var controls_scene: PackedScene
+
+##Pantalla de derrota, con sus botones de reintentar y volver al título.
+@export var game_over_scene: PackedScene
+
 @export var print_events: bool = true
 
 @onready var _level_container: Node2D = $LevelContainer
 @onready var _hud: Hud = %HUD
 
+#Dónde viven las pantallas de UI (menú, controles, fin de partida). Está en el mismo
+#CanvasLayer que el HUD pero por debajo en el árbol, así se dibuja encima de él.
+@onready var _screen_container: Control = %ScreenContainer
+
 #El nivel vivo. Null entre que se descarga uno y se instancia el siguiente.
 var _level: Node = null
 
-#La run terminó y estamos mostrando el cartel. Habilita la tecla de reinicio.
-var _run_finished: bool = false
+#La pantalla de UI viva. Null mientras se está jugando.
+var _screen: Node = null
 
-#Número de serie de la run actual.
-var _run_id: int = 0
+#La run terminó y estamos mostrando el final. Habilita la tecla de reinicio.
+var _run_finished: bool = false
 
 
 
@@ -36,7 +47,82 @@ func _ready() -> void:
 	if print_events:
 		print("[Main] listo")
 
+	go_to_menu()
+
+
+# ═══════════════ PANTALLAS ═══════════════
+
+
+##Vuelve al título: descarga el nivel que haya, esconde el HUD y muestra el menú.
+func go_to_menu() -> void:
+	get_tree().paused = false
+	_run_finished = false
+
+	_unload_level()
+
+	#El HUD vive fuera del nivel para sobrevivir a los reinicios, así que hay que
+	#apagarlo a mano: descargar el nivel no lo toca.
+	_hud.hide_end_message()
+	_hud.visible = false
+
+	var menu: MainMenu = _show_screen(main_menu_scene) as MainMenu
+
+	if menu == null:
+		push_error("Main: main_menu_scene está vacío, o su raíz no tiene el script main_menu.gd.")
+		return
+
+	menu.play_pressed.connect(start_game)
+	menu.controls_pressed.connect(go_to_controls)
+
+	if print_events:
+		print("[Main] menú")
+
+
+##Muestra los controles. La única salida es volver al título: esta pantalla no juega.
+func go_to_controls() -> void:
+	var controls: ControlsScreen = _show_screen(controls_scene) as ControlsScreen
+
+	if controls == null:
+		push_error("Main: controls_scene está vacío, o su raíz no tiene el script controls.gd.")
+		return
+
+	controls.back_pressed.connect(go_to_menu)
+
+	if print_events:
+		print("[Main] controles")
+
+
+##Arranca una partida: cierra la pantalla, prende el HUD y carga el nivel.
+func start_game() -> void:
+	_close_screen()
+	_hud.visible = true
 	_load_level()
+
+
+#Una sola pantalla viva a la vez. Devuelve la instancia para que quien la pidió le
+#conecte las señales: así el que decide qué hace cada botón es siempre Main.
+func _show_screen(scene: PackedScene) -> Node:
+	_close_screen()
+
+	if scene == null:
+		return null
+
+	_screen = scene.instantiate()
+	_screen_container.add_child(_screen)
+
+	return _screen
+
+
+#Mismo criterio que _unload_level(): remove_child() la saca del árbol en el acto y
+#queue_free() la destruye al final del frame. Con queue_free() solo, la pantalla vieja
+#seguiría viva —y recibiendo clicks— durante el resto del frame.
+func _close_screen() -> void:
+	if _screen == null:
+		return
+
+	_screen_container.remove_child(_screen)
+	_screen.queue_free()
+	_screen = null
 
 
 ##Descarga el nivel que haya, instancia uno nuevo y lo cablea.
@@ -47,7 +133,6 @@ func _load_level() -> void:
 	
 	get_tree().paused = false
 	_run_finished = false
-	_run_id += 1
 	_hud.hide_end_message()
 
 	_unload_level()
@@ -96,42 +181,44 @@ func _on_run_won(magic: int) -> void:
 	if print_events:
 		print("[Main] run ganada con %d de magia" % magic)
 
-	#Sin reinicio automático: ganar es el premio, se mira el tiempo que uno quiera.
-	_finish_run("¡GANASTE!\n%d de magia\n\nR para volver a jugar" % magic)
+	_finish_run(true, magic)
 
 
 func _on_run_lost(magic: int) -> void:
 	if print_events:
-		print("[Main] run perdida con %d de magia — reiniciando en %.1f s" % [magic, restart_delay])
+		print("[Main] run perdida con %d de magia" % magic)
 
-	#Dos líneas menos que la victoria: en la derrota el cartel se reinicia solo, así que
-	_finish_run("SE ACABÓ EL TIEMPO\n%d de magia" % magic)
-
-	var shown_at: int = Time.get_ticks_msec()
-
-	var my_run: int = _run_id
+	_finish_run(false, magic)
 
 
-	await get_tree().create_timer(restart_delay, true).timeout
-
-
-	if print_events:
-		print("[Main] cartel en pantalla %d ms (pedidos %d ms)" % [Time.get_ticks_msec() - shown_at, roundi(restart_delay * 1000.0)])
-
-	if _run_id == my_run and _run_finished:
-		_load_level()
-
-
-#Congela el mundo y muestra el cartel.
-func _finish_run(message: String) -> void:
+#Punto único de salida de una run, igual que _end_run() en RunState.
+#Hoy los dos finales se ven distinto porque no existe una pantalla de victoria: la
+#derrota abre game_over.tscn, la victoria sigue usando el cartel del HUD y la tecla R.
+func _finish_run(won: bool, magic: int) -> void:
 	_run_finished = true
 	get_tree().paused = true
-	_hud.show_end_message(message)
+
+	if won:
+		_hud.show_end_message("¡GANASTE!\n%d de magia\n\nR para volver a jugar" % magic)
+		return
+
+	var screen: GameOverScreen = _show_screen(game_over_scene) as GameOverScreen
+
+	if screen == null:
+		push_error("Main: game_over_scene está vacío, o su raíz no tiene el script game_over.gd.")
+		return
+
+	#Reintentar recarga el mismo nivel; volver al título descarta la partida. Las dos
+	#despausan por su cuenta, en _load_level() y en go_to_menu().
+	screen.play_again_pressed.connect(start_game)
+	screen.menu_pressed.connect(go_to_menu)
 
 
-
+#La tecla R sobrevive solo para la victoria, que todavía termina en un cartel sin botones.
+#La condición es que NO haya pantalla: cuando la derrota muestra game_over.tscn, la salida
+#son sus botones, y R no tiene por qué existir como atajo secreto.
 func _unhandled_input(event: InputEvent) -> void:
-	if not _run_finished:
+	if not _run_finished or _screen != null:
 		return
 
 	if event is InputEventKey:

@@ -26,12 +26,16 @@ texture_region_size = Vector2i(128, 128)
 1:2/0 = 0
 1:3/0 = 0
 5:3/0 = 0
+5:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
 6:3/0 = 0
 7:1/0 = 0
+7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
 8:1/0 = 0
 7:3/0 = 0
+7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
 8:3/0 = 0
 5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
 6:1/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_k1we6"]
@@ -70,14 +74,14 @@ scale = Vector2(8.959999, 0.3355933)
 texture = ExtResource("1_yeikn")
 
 [node name="Player" parent="." unique_id=366121222 instance=ExtResource("2_yeikn")]
-position = Vector2(740, 890)
+position = Vector2(959, 899)
 collision_layer = 2
 
 [node name="Broom" parent="." unique_id=803280212 instance=ExtResource("4_3m0nd")]
 position = Vector2(1260, 903)
 
 [node name="Dirt" parent="." unique_id=607420559 instance=ExtResource("5_q1hu1")]
-position = Vector2(594, 925)
+position = Vector2(909, 1039)
 
 [node name="Broom2" parent="." unique_id=1225574544 instance=ExtResource("4_3m0nd")]
 position = Vector2(1450, 903)

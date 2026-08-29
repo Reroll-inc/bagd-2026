@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1_6r7go")
+move_speed = 200.0
 texture = ExtResource("2_uf7lh")
 display_size = Vector2(128, 256)
 metadata/_custom_type_script = "uid://3m6n0jo0ceug"

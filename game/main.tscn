@@ -2,16 +2,31 @@
 
 [ext_resource type="Script" uid="uid://ck082nashst2" path="res://game/main.gd" id="1_xtpaf"]
 [ext_resource type="PackedScene" uid="uid://ceykjxp5q6et4" path="res://game/levels/test_level.tscn" id="2_vop5m"]
-[ext_resource type="PackedScene" uid="uid://chl8nt8rp0y0o" path="res://game/UI/hud.tscn" id="3_emt18"]
+[ext_resource type="PackedScene" uid="uid://chl8nt8rp0y0o" path="res://game/ui/hud.tscn" id="3_emt18"]
+[ext_resource type="PackedScene" uid="uid://ms1svicuhsu2" path="res://game/ui/main_menu.tscn" id="3_vop5m"]
+[ext_resource type="PackedScene" uid="uid://bynrtdl5pvqk4" path="res://game/ui/Controls.tscn" id="4_5un7r"]
+[ext_resource type="PackedScene" uid="uid://cb530kk5iqkng" path="res://game/ui/game_over.tscn" id="5_dgpao"]
 
 [node name="Main" type="Node" unique_id=790870284]
 script = ExtResource("1_xtpaf")
 level_scene = ExtResource("2_vop5m")
+main_menu_scene = ExtResource("3_vop5m")
+controls_scene = ExtResource("4_5un7r")
+game_over_scene = ExtResource("5_dgpao")
 
 [node name="GUI" type="CanvasLayer" parent="." unique_id=1355740450]
 process_mode = 3
 
 [node name="HUD" parent="GUI" unique_id=685220952 instance=ExtResource("3_emt18")]
 unique_name_in_owner = true
+
+[node name="ScreenContainer" type="Control" parent="GUI" unique_id=1103790977]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="LevelContainer" type="Node2D" parent="." unique_id=2041775378]

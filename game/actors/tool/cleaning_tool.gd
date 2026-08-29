@@ -21,11 +21,13 @@ const SELECTED_TINT: Color = Color(1.3, 1.3, 0.9)
 #Tolerancia en píxeles para dar por llegado el destino
 const ARRIVAL_THRESHOLD: float = 6.0
 
-#Sonda de borde. Los tres valores son RELATIVOS al cuerpo, nunca absolutos
-# MARGIN: cuánto MÁS ALLÁ del borde del cuerpo mira, hacia adelante.
-# RISE:   cuánto arranca por ENCIMA de los pies. Un rayo que nace justo sobre la
+#Sonda de borde. Los tres valores son RELATIVOS al cuerpo, nunca absolutos: la escoba
+#ya cambió de tamaño una vez (display_size pasó de 32×64 a 128×256) y con medidas fijas
+#la sonda quedó colgando dentro del cuerpo, sin llegar nunca al piso.
+#  MARGIN: cuánto MÁS ALLÁ del borde del cuerpo mira, hacia adelante.
+#  RISE:   cuánto arranca por ENCIMA de los pies. Un rayo que nace justo sobre la
 #          superficie puede no detectarla.
-# DEPTH:  cuánto baja por debajo de los pies. Más que esto es un precipicio.
+#  DEPTH:  cuánto baja por debajo de los pies. Más que esto es un precipicio.
 const LEDGE_PROBE_MARGIN: float = 6.0
 const LEDGE_PROBE_RISE: float = 8.0
 const LEDGE_PROBE_DEPTH: float = 32.0
@@ -34,7 +36,7 @@ const LEDGE_PROBE_DEPTH: float = 32.0
 const WORLD_LAYER_MASK: int = 1
 
 #Radio en el que el objeto detecta mugre de su tipo.
-const CLEAN_RANGE: float = 60.0
+const CLEAN_RANGE: float = 100
 
 enum State {ASLEEP, IDLE, MOVING, CLEANING}
 
@@ -182,6 +184,9 @@ func _navigate_dumb() -> void:
 #La sonda se reubica adelante en la dirección de marcha y se fuerza a medir AHORA:
 #force_raycast_update() evita usar el resultado del frame anterior, que corresponde
 #a una posición que el objeto ya dejó atrás.
+#📖 Los dos bordes se calculan por separado porque el collider puede estar descentrado
+#(el de la escoba lo está: x = -5). Con un único ±offset, la sonda quedaría dentro del
+#cuerpo de un lado y demasiado afuera del otro.
 func _is_ledge_ahead(direction: float) -> bool:
 	if direction > 0.0:
 		_ledge_probe.position.x = _body_box.end.x + LEDGE_PROBE_MARGIN
@@ -277,6 +282,8 @@ func _build_ledge_probe() -> void:
 func _measure_body() -> Rect2:
 	var rect: RectangleShape2D = _collider.shape as RectangleShape2D
 
+	#Solo sabe medir rectángulos. Si algún día alguien le pone una cápsula, que se entere
+	#por el Output y no por una escoba que se niega a caminar sin decir por qué.
 	if rect == null:
 		push_error("CleaningTool %s: se esperaba un RectangleShape2D para medir la sonda de borde" % name)
 		return Rect2(Vector2(-16.0, -16.0), Vector2(32.0, 32.0))
@@ -286,7 +293,6 @@ func _measure_body() -> Rect2:
 	#Rect2 se arma desde la esquina superior izquierda; el CollisionShape2D está centrado
 	#en su position. De acá salen end.y (los pies) y los dos bordes laterales.
 	return Rect2(_collider.position - size * 0.5, size)
-
 
 #Selección exclusiva: hechizar a uno deselecciona a todos los demás. Sin esto, dos
 #objetos seleccionados recibirían la misma orden y caminarían al mismo punto.
