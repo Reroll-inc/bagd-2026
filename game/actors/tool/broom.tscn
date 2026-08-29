@@ -6,6 +6,19 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mbsr"]
 size = Vector2(36, 197)
 
+[sub_resource type="Animation" id="Animation_hpw4p"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_7p1hi"]
+resource_name = "move"
+length = 2.9333334
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hpw4p"]
+_data = {
+&"RESET": SubResource("Animation_hpw4p"),
+&"move": SubResource("Animation_7p1hi")
+}
+
 [node name="Broom" type="CharacterBody2D" unique_id=803280212]
 collision_layer = 4
 script = ExtResource("1_bjyja")
@@ -16,3 +29,6 @@ data = ExtResource("2_7p1hi")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=235146552]
 position = Vector2(-5, 19.5)
 shape = SubResource("RectangleShape2D_6mbsr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1520019774]
+libraries/ = SubResource("AnimationLibrary_hpw4p")
