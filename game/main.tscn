@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bsvual6wovra0"]
+
+[ext_resource type="Script" uid="uid://ck082nashst2" path="res://game/main.gd" id="1_xtpaf"]
+[ext_resource type="PackedScene" uid="uid://ceykjxp5q6et4" path="res://game/levels/test_level.tscn" id="2_vop5m"]
+[ext_resource type="PackedScene" uid="uid://chl8nt8rp0y0o" path="res://game/UI/hud.tscn" id="3_emt18"]
+
+[node name="Main" type="Node" unique_id=790870284]
+script = ExtResource("1_xtpaf")
+level_scene = ExtResource("2_vop5m")
+
+[node name="GUI" type="CanvasLayer" parent="." unique_id=1355740450]
+process_mode = 3
+
+[node name="HUD" parent="GUI" unique_id=685220952 instance=ExtResource("3_emt18")]
+unique_name_in_owner = true
+
+[node name="LevelContainer" type="Node2D" parent="." unique_id=2041775378]

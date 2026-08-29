@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DirtData" format=3 uid="uid://4wn7lemslgm5"]
+
+[ext_resource type="Script" uid="uid://djb47w00qwqlm" path="res://game/resource_definitions/dirt_data.gd" id="1_gkbfw"]
+[ext_resource type="Texture2D" uid="uid://caxtatxuwqngc" path="res://game/actors/dirt/dust.jpg" id="2_rmwhs"]
+
+[resource]
+script = ExtResource("1_gkbfw")
+texture = ExtResource("2_rmwhs")
+metadata/_custom_type_script = "uid://djb47w00qwqlm"

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SpellData" format=3 uid="uid://dkhi11aegp4tl"]
+
+[ext_resource type="Script" uid="uid://bhpe85efn5gow" path="res://game/resource_definitions/spell_data.gd" id="1_l350y"]
+
+[resource]
+script = ExtResource("1_l350y")
+color = Color(1, 0, 0, 1)
+metadata/_custom_type_script = "uid://bhpe85efn5gow"

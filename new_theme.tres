@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://ckmp7m2473q4u"]
+
+[ext_resource type="FontFile" uid="uid://dts4bt3s4aw7u" path="res://game/UI/Fonts/CinzelDecorative-Bold.ttf" id="1_amlv4"]
+
+[resource]
+default_font = ExtResource("1_amlv4")
