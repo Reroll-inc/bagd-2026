@@ -35,8 +35,12 @@ const LEDGE_PROBE_DEPTH: float = 32.0
 #Capa 1 = World. La sonda solo pregunta por piso, no por mugre ni por otros objetos.
 const WORLD_LAYER_MASK: int = 1
 
-#Radio en el que el objeto detecta mugre de su tipo.
-const CLEAN_RANGE: float = 100
+#Distancia HORIZONTAL a la que el objeto alcanza mugre de su tipo.
+#Se mide solo en X a propósito. La escoba y el parche están los dos apoyados en el
+#piso, pero sus orígenes viven a alturas muy distintas 
+#Esto vale mientras toda la mugre sea de piso. Si algún día entra DirtData
+#Orientation.WALL o CEILING, ese caso necesita su propio criterio de alcance.
+const CLEAN_RANGE: float = 60.0
 
 enum State {ASLEEP, IDLE, MOVING, CLEANING}
 
@@ -184,9 +188,7 @@ func _navigate_dumb() -> void:
 #La sonda se reubica adelante en la dirección de marcha y se fuerza a medir AHORA:
 #force_raycast_update() evita usar el resultado del frame anterior, que corresponde
 #a una posición que el objeto ya dejó atrás.
-#📖 Los dos bordes se calculan por separado porque el collider puede estar descentrado
-#(el de la escoba lo está: x = -5). Con un único ±offset, la sonda quedaría dentro del
-#cuerpo de un lado y demasiado afuera del otro.
+#Los dos bordes se calculan por separado porque el collider puede estar descentrado
 func _is_ledge_ahead(direction: float) -> bool:
 	if direction > 0.0:
 		_ledge_probe.position.x = _body_box.end.x + LEDGE_PROBE_MARGIN
@@ -236,7 +238,7 @@ func _do_cleaning(delta: float) -> void:
 	_target_dirt.clean(data.cleaning_power)
 
 
-#Busca el parche más cercano DE SU TIPO dentro del radio. Un objeto limpia una sola
+#Busca el parche más cercano DE SU TIPO dentro del alcance. Un objeto limpia una sola
 #cosa: la escoba pasa por encima de una telaraña sin tocarla.
 func _find_dirt_in_range() -> Dirt:
 	var closest: Dirt = null
@@ -251,7 +253,8 @@ func _find_dirt_in_range() -> Dirt:
 		if dirt.data.type != data.cleans:
 			continue
 
-		var distance: float = global_position.distance_to(dirt.global_position)
+		#Solo la separación horizontal: la vertical entre orígenes es ruido, no distancia.
+		var distance: float = absf(dirt.global_position.x - global_position.x)
 
 		if distance <= closest_distance:
 			closest = dirt
@@ -318,12 +321,15 @@ func _change_state(new_state: State) -> void:
 #Mismo método que en Dirt: el sprite se escala para ocupar display_size, sea cual sea
 #la resolución de la imagen.
 func _fit_sprite_to(target: Vector2) -> void:
-	var texture_size: Vector2 = sprite.texture.get_size()
+	#Mismo criterio que en dirt.gd: get_size() devuelve la HOJA entera, pero con
+	#hframes/vframes el Sprite2D dibuja una sola celda. Hoy el arte de la escoba no usa
+	#frames y esto divide por 1
+	var frame_size: Vector2 = sprite.texture.get_size() / Vector2(sprite.hframes, sprite.vframes)
 
-	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+	if frame_size.x <= 0.0 or frame_size.y <= 0.0:
 		return
 
-	sprite.scale = target / texture_size
+	sprite.scale = target / frame_size
 
 
 

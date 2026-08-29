@@ -70,14 +70,19 @@ func get_passes_left() -> int:
 
 
 func _fit_sprite_to(target: Vector2) -> void:
-	var texture_size: Vector2 = sprite.texture.get_size()
+	#get_size() devuelve la HOJA entera, pero con hframes/vframes el Sprite2D dibuja
+	#una sola celda. Escalar contra la hoja achica el parche en proporción a la cantidad
+	#de frames, y si hframes != vframes además lo deforma: dust.png es 256x64 con 4
+	#frames, así que daba 0.1875 en x contra 0.75 en y. Sin frames esto divide por 1 y
+	#queda igual que antes.
+	var frame_size: Vector2 = sprite.texture.get_size() / Vector2(sprite.hframes, sprite.vframes)
 
 	#Guarda contra división por cero: una textura inválida daría scale = inf y el nodo
 	#desaparecería de la pantalla sin ningún error que lo explique.
-	if texture_size.x <= 0.0 or texture_size.y <= 0.0:
+	if frame_size.x <= 0.0 or frame_size.y <= 0.0:
 		return
 
-	sprite.scale = target / texture_size
+	sprite.scale = target / frame_size
 
 #Feedback de progreso sin arte nuevo: el parche se va desvaneciendo. El piso de 0.25
 #es para que el último pase siga siendo visible — si llegara a 0 el jugador creería que
