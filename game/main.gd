@@ -21,6 +21,9 @@ extends Node
 ##Pantalla de derrota, con sus botones de reintentar y volver al título.
 @export var game_over_scene: PackedScene
 
+##Pantalla de victoria. Misma forma que la de derrota, más la magia juntada.
+@export var victory_scene: PackedScene
+
 @export var print_events: bool = true
 
 @onready var _level_container: Node2D = $LevelContainer
@@ -191,38 +194,32 @@ func _on_run_lost(magic: int) -> void:
 	_finish_run(false, magic)
 
 
-#Punto único de salida de una run, igual que _end_run() en RunState.
-#Hoy los dos finales se ven distinto porque no existe una pantalla de victoria: la
-#derrota abre game_over.tscn, la victoria sigue usando el cartel del HUD y la tecla R.
+#Punto único de salida de una run, igual que _end_run() en RunState. Los dos finales
+#terminan en una pantalla con los mismos dos botones; lo único que cambia es cuál.
 func _finish_run(won: bool, magic: int) -> void:
 	_run_finished = true
 	get_tree().paused = true
 
 	if won:
-		_hud.show_end_message("¡GANASTE!\n%d de magia\n\nR para volver a jugar" % magic)
+		var victory: VictoryScreen = _show_screen(victory_scene) as VictoryScreen
+
+		if victory == null:
+			push_error("Main: victory_scene está vacío, o su raíz no tiene el script victory.gd.")
+			return
+
+		victory.show_magic(magic)
+		victory.play_again_pressed.connect(start_game)
+		victory.menu_pressed.connect(go_to_menu)
 		return
 
-	var screen: GameOverScreen = _show_screen(game_over_scene) as GameOverScreen
+	var defeat: GameOverScreen = _show_screen(game_over_scene) as GameOverScreen
 
-	if screen == null:
+	if defeat == null:
 		push_error("Main: game_over_scene está vacío, o su raíz no tiene el script game_over.gd.")
 		return
 
 	#Reintentar recarga el mismo nivel; volver al título descarta la partida. Las dos
 	#despausan por su cuenta, en _load_level() y en go_to_menu().
-	screen.play_again_pressed.connect(start_game)
-	screen.menu_pressed.connect(go_to_menu)
+	defeat.play_again_pressed.connect(start_game)
+	defeat.menu_pressed.connect(go_to_menu)
 
-
-#La tecla R sobrevive solo para la victoria, que todavía termina en un cartel sin botones.
-#La condición es que NO haya pantalla: cuando la derrota muestra game_over.tscn, la salida
-#son sus botones, y R no tiene por qué existir como atajo secreto.
-func _unhandled_input(event: InputEvent) -> void:
-	if not _run_finished or _screen != null:
-		return
-
-	if event is InputEventKey:
-		var key_event: InputEventKey = event as InputEventKey
-
-		if key_event.pressed and not key_event.echo and key_event.physical_keycode == KEY_R:
-			_load_level()

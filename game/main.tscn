@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ms1svicuhsu2" path="res://game/ui/main_menu.tscn" id="3_vop5m"]
 [ext_resource type="PackedScene" uid="uid://bynrtdl5pvqk4" path="res://game/ui/Controls.tscn" id="4_5un7r"]
 [ext_resource type="PackedScene" uid="uid://cb530kk5iqkng" path="res://game/ui/game_over.tscn" id="5_dgpao"]
+[ext_resource type="PackedScene" uid="uid://cpjthpjqwu6ej" path="res://game/ui/victory.tscn" id="6_wjctj"]
 
 [node name="Main" type="Node" unique_id=790870284]
 script = ExtResource("1_xtpaf")
@@ -13,6 +14,7 @@ level_scene = ExtResource("2_vop5m")
 main_menu_scene = ExtResource("3_vop5m")
 controls_scene = ExtResource("4_5un7r")
 game_over_scene = ExtResource("5_dgpao")
+victory_scene = ExtResource("6_wjctj")
 
 [node name="GUI" type="CanvasLayer" parent="." unique_id=1355740450]
 process_mode = 3
