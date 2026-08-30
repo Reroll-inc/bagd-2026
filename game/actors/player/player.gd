@@ -52,6 +52,8 @@ func _physics_process(delta: float) -> void:
 	# Va DESPUÉS de move_and_slide(): recién ahí velocity refleja los choques del frame.
 	# Antes, un salto contra el techo se vería como "subiendo" durante un frame.
 	_update_animation()
+	var camera = ($Camera2D as Camera2D)
+	ShaderVars.x_pos = camera.get_screen_center_position().x
 
 # ═══════════════ ESTADOS ═══════════════
 

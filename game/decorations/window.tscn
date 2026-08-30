@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://jv8t67xnpgw5"]
+
+[ext_resource type="Texture2D" uid="uid://l2fi84bo71cj" path="res://game/decorations/window-backgorund.png" id="1_a31pq"]
+[ext_resource type="Script" uid="uid://cx26sqqoawg7" path="res://game/decorations/window.gd" id="1_e6dvg"]
+[ext_resource type="Texture2D" uid="uid://sxyp0s1eh8n4" path="res://game/decorations/window-panes.png" id="1_enbi2"]
+[ext_resource type="Texture2D" uid="uid://dmtf2ou0vhs22" path="res://game/decorations/window-frame.png" id="2_a31pq"]
+[ext_resource type="Shader" uid="uid://cambwkmofhxp7" path="res://game/decorations/window-background.gdshader" id="2_x3n1v"]
+[ext_resource type="Shader" uid="uid://dtc3jf6uot3o" path="res://game/decorations/window.gdshader" id="4_j56md"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x3n1v"]
+shader = ExtResource("2_x3n1v")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j56md"]
+shader = ExtResource("4_j56md")
+shader_parameter/x_pos = 0.0
+
+[node name="Window" type="Node2D" unique_id=1122397617]
+script = ExtResource("1_e6dvg")
+
+[node name="Panes" type="Sprite2D" parent="." unique_id=1510561043]
+clip_children = 2
+texture = ExtResource("1_enbi2")
+
+[node name="background" type="Sprite2D" parent="Panes" unique_id=1701787945]
+material = SubResource("ShaderMaterial_x3n1v")
+texture = ExtResource("1_a31pq")
+
+[node name="WindowPanes" type="Sprite2D" parent="." unique_id=875778919]
+modulate = Color(1, 1, 1, 0.5411765)
+material = SubResource("ShaderMaterial_j56md")
+position = Vector2(0, 1)
+texture = ExtResource("1_enbi2")
+
+[node name="Frame" type="Sprite2D" parent="." unique_id=903468320]
+texture = ExtResource("2_a31pq")
