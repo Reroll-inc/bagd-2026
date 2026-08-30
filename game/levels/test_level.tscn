@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bkphkt7u632kj" path="res://game/decorations/stool.png" id="6_tc1fy"]
 [ext_resource type="Texture2D" uid="uid://4qaoylv3x25d" path="res://game/decorations/couch.png" id="7_hp2rm"]
 [ext_resource type="PackedScene" uid="uid://jv8t67xnpgw5" path="res://game/decorations/window.tscn" id="8_l0cbk"]
+[ext_resource type="Script" uid="uid://dw6el7m764m1h" path="res://game/systems/dirt_spawner.gd" id="14_tc1fy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hrds"]
 texture = ExtResource("1_wxaf8")
@@ -127,10 +128,10 @@ texture = ExtResource("7_hp2rm")
 position = Vector2(959, 899)
 collision_layer = 2
 
-[node name="Broom" parent="." unique_id=803280212 instance=ExtResource("4_3m0nd")]
+[node name="Broom1" parent="." unique_id=803280212 instance=ExtResource("4_3m0nd")]
 position = Vector2(97, 903)
 
-[node name="Dirt" parent="." unique_id=607420559 instance=ExtResource("5_q1hu1")]
+[node name="Dirt1" parent="." unique_id=607420559 instance=ExtResource("5_q1hu1")]
 position = Vector2(909, 1039)
 
 [node name="Dirt2" parent="." unique_id=1047439547 instance=ExtResource("5_q1hu1")]
@@ -158,12 +159,61 @@ position = Vector2(1442, 1039)
 position = Vector2(4028, 903)
 
 [node name="Broom3" parent="." unique_id=1995014564 instance=ExtResource("4_3m0nd")]
-position = Vector2(2833, 903)
-
-[node name="Broom4" parent="." unique_id=1785547895 instance=ExtResource("4_3m0nd")]
-position = Vector2(1294, 903)
+position = Vector2(2048, 903)
 
 [node name="RunState" type="Node" parent="." unique_id=1597719107]
 script = ExtResource("5_3m0nd")
 run_seconds = 40.0
 magic_goal = 120
+
+[node name="DirtSpawner" type="Node2D" parent="." unique_id=640265732]
+script = ExtResource("14_tc1fy")
+print_events = true
+
+[node name="Spawn1" type="Marker2D" parent="DirtSpawner" unique_id=167956812]
+position = Vector2(798, 1039)
+
+[node name="Spawn2" type="Marker2D" parent="DirtSpawner" unique_id=1753418667]
+position = Vector2(252, 1039)
+
+[node name="Spawn3" type="Marker2D" parent="DirtSpawner" unique_id=1950611532]
+position = Vector2(540, 1039)
+
+[node name="Spawn4" type="Marker2D" parent="DirtSpawner" unique_id=1792678011]
+position = Vector2(1254, 1039)
+
+[node name="Spawn5" type="Marker2D" parent="DirtSpawner" unique_id=494591610]
+position = Vector2(1440, 1039)
+
+[node name="Spawn6" type="Marker2D" parent="DirtSpawner" unique_id=2138715360]
+position = Vector2(1831, 1039)
+
+[node name="Spawn7" type="Marker2D" parent="DirtSpawner" unique_id=1992324694]
+position = Vector2(2285, 1039)
+
+[node name="Spawn8" type="Marker2D" parent="DirtSpawner" unique_id=1421557348]
+position = Vector2(3328, 1039)
+
+[node name="Spawn9" type="Marker2D" parent="DirtSpawner" unique_id=1485746168]
+position = Vector2(2784, 1039)
+
+[node name="Spawn10" type="Marker2D" parent="DirtSpawner" unique_id=1365304026]
+position = Vector2(3467, 1039)
+
+[node name="Spawn11" type="Marker2D" parent="DirtSpawner" unique_id=214854333]
+position = Vector2(3930, 1039)
+
+[node name="Spawn12" type="Marker2D" parent="DirtSpawner" unique_id=1883135907]
+position = Vector2(3827, 1039)
+
+[node name="Spawn13" type="Marker2D" parent="DirtSpawner" unique_id=1956673112]
+position = Vector2(75, 1039)
+
+[node name="Spawn14" type="Marker2D" parent="DirtSpawner" unique_id=638336767]
+position = Vector2(2147, 1039)
+
+[node name="Spawn15" type="Marker2D" parent="DirtSpawner" unique_id=721129657]
+position = Vector2(2892, 1039)
+
+[node name="Spawn16" type="Marker2D" parent="DirtSpawner" unique_id=606645297]
+position = Vector2(2708, 1039)

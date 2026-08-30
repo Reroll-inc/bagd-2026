@@ -40,6 +40,8 @@ func _ready() -> void:
 		sprite.texture = data.texture
 		_fit_sprite_to(data.display_size)
 
+	_randomize_look()
+
 
 ##Recibe un golpe de limpieza y devuelve la magia otorgada.
 ##La llama la herramienta que está limpiando. `power` es ToolData.cleaning_power.
@@ -67,6 +69,20 @@ func clean(power: int) -> int:
 func get_passes_left() -> int:
 	return _passes_left
 
+
+
+#Elige uno de los dibujos de la hoja. Vive acá y no en el spawner porque el que sabe
+#cuántos frames tiene su textura es este nodo: el spawner decide DÓNDE va un parche,
+#el parche decide CÓMO se ve. Con una textura de un solo frame esto no hace nada.
+func _randomize_look() -> void:
+	var frames: int = sprite.hframes * sprite.vframes
+
+	if frames <= 1:
+		return
+
+	#API Godot 4 siembra el generador solo al arrancar, así que no hace falta llamar a
+	#randomize(). Si dos partidas seguidas salieran idénticas, esto es lo primero a mirar.
+	sprite.frame = randi() % frames
 
 
 func _fit_sprite_to(target: Vector2) -> void:
