@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://d2c7phh4ja58i" path="res://assets/placeholder/dust.png" id="3_lvidr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
-size = Vector2(55, 34.5)
+size = Vector2(41, 34.5)
 
 [node name="Dirt" type="Area2D" unique_id=607420559]
 scale = Vector2(2, 2)
@@ -19,5 +19,5 @@ texture = ExtResource("3_lvidr")
 hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=84803624]
-position = Vector2(-0.5, -0.25)
+position = Vector2(1, -0.25)
 shape = SubResource("RectangleShape2D_g4v7s")

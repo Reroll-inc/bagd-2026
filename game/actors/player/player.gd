@@ -17,9 +17,9 @@ const ANIM_RUN: StringName = &"run"
 const ANIM_JUMP: StringName = &"jump"
 const ANIM_FALL: StringName = &"fall"
 
-# 📖 Debajo de esta velocidad la maga cuenta como quieta. Existe porque la fricción
-# deja residuos de fracciones de píxel: sin umbral, el clip parpadearía entre idle y
-# run durante el frenado.
+#Debajo de esta velocidad la maga cuenta como quieta. Existe porque la fricción
+#deja residuos de fracciones de píxel: sin umbral, el clip parpadearía entre idle y
+#run durante el frenado.
 const IDLE_SPEED_THRESHOLD: float = 10.0
 
 enum State {
@@ -52,6 +52,8 @@ func _physics_process(delta: float) -> void:
 	# Va DESPUÉS de move_and_slide(): recién ahí velocity refleja los choques del frame.
 	# Antes, un salto contra el techo se vería como "subiendo" durante un frame.
 	_update_animation()
+	var camera = ($Camera2D as Camera2D)
+	ShaderVars.x_pos = camera.get_screen_center_position().x
 
 # ═══════════════ ESTADOS ═══════════════
 
@@ -123,7 +125,7 @@ func _update_facing() -> void:
 # ═══════════════ ANIMACIÓN ═══════════════
 
 
-# 🧩 Traductor entre gameplay y presentación: la máquina de estados decide QUÉ está
+# Traductor entre gameplay y presentación: la máquina de estados decide QUÉ está
 # haciendo la maga, esto decide CÓMO se ve. Están separados para que sumar un clip no
 # obligue a tocar la física, ni al revés. Sin esta división, cada animación nueva
 # significaría meter mano en _state_grounded() y _state_airborne().
@@ -147,8 +149,8 @@ func _update_animation() -> void:
 		else:
 			print("[Player] anim → ", wanted, "  (no existe, cae a ", actual, ")")
 
-	# 📖 play() solo cuando el clip CAMBIA. Llamarlo todos los frames es la forma
-	# clásica de dejar una animación congelada para siempre en su primer cuadro.
+	#play() solo cuando el clip CAMBIA. Llamarlo todos los frames es la forma
+	#clásica de dejar una animación congelada para siempre en su primer cuadro.
 	if actual == _current_anim:
 		return
 

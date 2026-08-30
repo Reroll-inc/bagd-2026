@@ -20,6 +20,7 @@ config/icon="res://assets/icon.svg"
 
 SignalBus="*uid://tghdukr3b8gx"
 SignalLens="*uid://85rkx60vm7a7"
+ShaderVars="*uid://brdr6aa0dj8tf"
 
 [debug]
 
