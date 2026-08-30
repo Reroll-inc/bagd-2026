@@ -222,4 +222,3 @@ func _finish_run(won: bool, magic: int) -> void:
 	#despausan por su cuenta, en _load_level() y en go_to_menu().
 	defeat.play_again_pressed.connect(start_game)
 	defeat.menu_pressed.connect(go_to_menu)
-

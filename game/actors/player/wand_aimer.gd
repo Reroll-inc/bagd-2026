@@ -35,6 +35,7 @@ var _cooldown_left: float = 0.0
 @onready var player: Player = get_parent()
 @onready var wand_sprite: Sprite2D = $WandSprite
 @onready var muzzle: Marker2D = $Muzzle
+@onready var wandSfx: AudioStreamPlayer2D = $"../WandSfx"
 
 #hacia donde apunta la varita
 var aim_direction: Vector2 = Vector2.RIGHT
@@ -97,7 +98,7 @@ func _cast() -> void:
 	get_tree().current_scene.add_child(projectile)
 
 	projectile.launch(get_muzzle_position(), aim_direction, spell)
-
+	wandSfx.play()
 
 
 # de donde sale el hechizo

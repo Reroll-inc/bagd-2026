@@ -68,7 +68,7 @@ var _body_box: Rect2 = Rect2()
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var _collider: CollisionShape2D = $CollisionShape2D
-
+@onready var wakeUpSfx : AudioStreamPlayer2D = $WakeUpSfx
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -118,6 +118,7 @@ func try_animate(spell: SpellData) -> bool:
 	if was_asleep:
 		_change_state(State.IDLE)
 		animated.emit()
+		wakeUpSfx.play()
 
 	_select_exclusively()
 
@@ -236,6 +237,7 @@ func _do_cleaning(delta: float) -> void:
 
 	_clean_timer = 0.0
 	_target_dirt.clean(data.cleaning_power)
+	
 
 
 #Busca el parche más cercano DE SU TIPO dentro del alcance. Un objeto limpia una sola

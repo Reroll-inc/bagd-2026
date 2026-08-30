@@ -37,6 +37,8 @@ var _last_wanted_anim: StringName = &""
 
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var woodStepSfx: AudioStreamPlayer2D = $WoodStep
+@onready var woodStepSfxTimer: Timer = $StepSfxTimer
 
 func _physics_process(delta: float) -> void:
 	_update_facing()
@@ -106,7 +108,10 @@ func _apply_movement(delta: float, control: float) -> void:
 
 	#move_toward(actual, objetivo, paso) acerca un número a otro sin pasarse.
 	velocity.x = move_toward(velocity.x, target_speed, rate * control * delta)
-
+	if abs(velocity.x) > 0:
+		if woodStepSfxTimer.is_stopped():
+			woodStepSfxTimer.start()
+			woodStepSfx.play()
 
 #el mago mira hacia el MOUSE. Eso te deja retroceder
 #mientras seguís limpiando, y evita que la varita quede trabada contra el

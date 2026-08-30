@@ -2,9 +2,15 @@
 
 [ext_resource type="Script" uid="uid://c1lbmtrdno65o" path="res://game/actors/tool/cleaning_tool.gd" id="1_bjyja"]
 [ext_resource type="Resource" uid="uid://cm1n83mqeh1la" path="res://game/actors/tool/broom.tres" id="2_7p1hi"]
+[ext_resource type="AudioStream" uid="uid://3a8rluq1yxc3" path="res://assets/sounds/broom-activate.ogg" id="3_hpw4p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mbsr"]
 size = Vector2(36, 197)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_7p1hi"]
+random_pitch = 1.0855428
+streams_count = 1
+stream_0/stream = ExtResource("3_hpw4p")
 
 [node name="Broom" type="CharacterBody2D" unique_id=803280212]
 collision_layer = 4
@@ -16,3 +22,6 @@ data = ExtResource("2_7p1hi")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=235146552]
 position = Vector2(-5, 19.5)
 shape = SubResource("RectangleShape2D_6mbsr")
+
+[node name="WakeUpSfx" type="AudioStreamPlayer2D" parent="." unique_id=546076316]
+stream = SubResource("AudioStreamRandomizer_7p1hi")
