@@ -163,7 +163,6 @@ position = Vector2(2048, 903)
 
 [node name="RunState" type="Node" parent="." unique_id=1597719107]
 script = ExtResource("5_3m0nd")
-run_seconds = 40.0
 magic_goal = 120
 
 [node name="DirtSpawner" type="Node2D" parent="." unique_id=640265732]

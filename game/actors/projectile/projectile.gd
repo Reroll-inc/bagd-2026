@@ -70,8 +70,17 @@ func _on_body_entered(body: Node2D) -> void:
 
 	_die()
 
-# El hechizo que toca mugre se pierde sin efecto: limpiar es trabajo del objeto animado,
-func _on_area_entered(_area: Area2D) -> void:
+#El hechizo que toca mugre de SU tipo ahora la limpia, rindiendo menos magia que
+#la escoba (SpellData.magic_scale). Con cleaning_power en 0 vuelve a perderse sin efecto,
+#que es el comportamiento que tenía hasta hoy.
+#El tipo tiene que coincidir por el mismo motivo que en try_animate(): un hechizo de polvo
+#no toca telarañas. Y pegue o no, el hechizo se gasta.
+func _on_area_entered(area: Area2D) -> void:
+	var dirt: Dirt = area as Dirt
+
+	if dirt != null and dirt.data != null and dirt.data.type == _spell.animates:
+		dirt.clean(_spell.cleaning_power, _spell.magic_scale)
+
 	_die()
 
 #luego voy a hacer el pool

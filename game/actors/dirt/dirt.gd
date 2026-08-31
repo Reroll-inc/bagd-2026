@@ -45,8 +45,17 @@ func _ready() -> void:
 
 ##Recibe un golpe de limpieza y devuelve la magia otorgada.
 ##La llama la herramienta que está limpiando. `power` es ToolData.cleaning_power.
-func clean(power: int) -> int:
+##
+##`magic_scale` descuenta la magia de ESE golpe sin tocar los pases que saca. Lo usa el
+##hechizo, que limpia igual que la escoba pero rinde menos magia. Por defecto 1.0, así
+##que quien limpie normalmente ni se entera de que el parámetro existe.
+func clean(power: int, magic_scale: float = 1.0) -> int:
 	if _passes_left <= 0:
+		return 0
+
+	#Sin esta guarda un power de 0 sacaría 0 pases y aun así cobraría el mínimo de 1
+	#de magia de abajo: magia gratis e infinita golpeando con fuerza cero.
+	if power <= 0:
 		return 0
 
 	#mini() evita cobrar de más: si quedaba 1 pase y la escoba pega con fuerza 3,
@@ -54,13 +63,18 @@ func clean(power: int) -> int:
 	var passes_removed: int = mini(power, _passes_left)
 	_passes_left -= passes_removed
 
-	var magic: int = passes_removed * data.magic_per_pass
+	#maxi(..., 1): un golpe que efectivamente sacó pases nunca paga 0. Con magic_scale
+	#bajo y magic_per_pass chico el redondeo daría 0, y limpiar sin cobrar nada se lee
+	#como que el golpe no contó.
+	var magic: int = maxi(roundi(float(passes_removed * data.magic_per_pass) * magic_scale), 1)
 	cleaned.emit(magic)
 
 	_refresh_visual()
 
 	if _passes_left <=0:
 		depleted.emit()
+
+
 		queue_free()
 	
 	return magic
