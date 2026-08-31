@@ -173,8 +173,9 @@ func has_auto_broom() -> bool:
 	return get_level(Upgrade.AUTO_BROOM) > 0
 
 
-##Borra la magia y las mejoras. Todavía no la llama nadie: cuándo se empieza de cero
-##(¿al volver al título? ¿al ganar?) se decide junto con el flujo de la tienda.
+##Borra la magia y las mejoras. La llama Main desde las dos salidas de la pantalla de
+##victoria: ganar cierra la partida y la siguiente arranca de cero. Perder NO resetea —
+##ese camino pasa por la tienda, que es justo donde el progreso tiene que sobrevivir.
 func reset() -> void:
 	_magic = 0
 	_levels.clear()
