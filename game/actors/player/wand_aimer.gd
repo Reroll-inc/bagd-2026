@@ -5,17 +5,17 @@ extends Node2D
 # 90° = horizontal
 # 120° = el piso adelante del mago
 #
-# 📖 El arco ya no arranca en 0°: con la maga de 256px, apuntar recto al techo hace
-# que la varita barra el cuerpo entero. Quedarse cerca de 90° la mantiene al costado.
-# Son @export para que se balanceen desde el Inspector, sin tocar código.
+#El arco ya no arranca en 0°: con la maga de 256px, apuntar recto al techo hace
+#que la varita barra el cuerpo entero. Quedarse cerca de 90° la mantiene al costado.
+#Son @export para que se balanceen desde el Inspector, sin tocar código.
 @export_range(0.0, 180.0, 1.0) var arc_min_deg: float = 55.0
 @export_range(0.0, 180.0, 1.0) var arc_max_deg: float = 125.0
 
-# 📖 Dónde nace la varita, medido desde el centro del player. La x es "hacia ADELANTE"
-# y va siempre POSITIVA: el código la espeja según facing_direction, porque flip_h
-# espeja el dibujo del sprite pero no mueve ningún nodo hijo ni hermano.
-# ⚠️ Esto pisa el position del nodo en cada frame: moverlo en el editor no hace nada,
-# el valor que manda es este. Se calibra corriendo el juego, no mirando la escena.
+#Dónde nace la varita, medido desde el centro del player. La x es "hacia ADELANTE"
+#y va siempre POSITIVA: el código la espeja según facing_direction, porque flip_h
+#espeja el dibujo del sprite pero no mueve ningún nodo hijo ni hermano.
+#Esto pisa el position del nodo en cada frame: moverlo en el editor no hace nada,
+#el valor que manda es este. Se calibra corriendo el juego, no mirando la escena.
 @export var hand_offset: Vector2 = Vector2(24.0, 0.0)
 
 const ACTION_CAST: StringName = &"cast"
@@ -88,7 +88,12 @@ func _tick_cooldown(delta: float) -> void:
 
 
 func _cast() -> void:
-	_cooldown_left = cast_cooldown
+	#La escala se pregunta en cada disparo y no se cachea en _ready(): así el valor
+	#siempre es el vigente, sin depender de que este nodo haya nacido después de la
+	#compra. Es una llamada por disparo, no por frame.
+	#El cooldown que manda es este @export, no SpellData.cooldown: ese campo existe
+	#pero no lo lee nadie.
+	_cooldown_left = cast_cooldown * PlayerProgress.get_cast_cooldown_scale()
 
 	var projectile: Projectile = PROJECTILE_SCENE.instantiate() as Projectile
 

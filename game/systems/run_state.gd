@@ -59,11 +59,25 @@ var _patches_left: int = 0
 #Cuántos había al empezar. Fijo durante toda la run: es el divisor del progreso.
 var _patches_total: int = 0
 
+#El reloj con el que arrancó ESTA run: run_seconds más lo que haya comprado el jugador.
+#Existe como variable aparte porque run_seconds es el valor de la escena y no cambia,
+#y el tiempo transcurrido hay que medirlo contra el total real.
+var _total_seconds: float = 0.0
+
 func _ready() -> void:
-	_time_left = run_seconds
+	#El bonus se lee una sola vez, al empezar: el reloj de una run se fija cuando arranca.
+	#Comprar tiempo en la tienda afecta a la ronda SIGUIENTE, que es cuando este nodo
+	#vuelve a nacer junto con el nivel.
+	var bonus: float = PlayerProgress.get_bonus_seconds()
+
+	_total_seconds = run_seconds + bonus
+	_time_left = _total_seconds
 	_running = true
 	_emit_time_if_changed()
 	magic_changed.emit(_magic)
+
+	if print_events and bonus > 0.0:
+		print("[RunState] reloj %.0f s (%.0f de base + %.0f comprados)" % [_total_seconds, run_seconds, bonus])
 
 	
 	#Un llamado diferido corre cuando el árbol ya terminó de armarse: el orden deja de importar.
@@ -121,7 +135,9 @@ func _end_run(won: bool) -> void:
 
 	if won:
 		if print_events:
-			print("[RunState] ✅ VICTORIA — mugre eliminada en %d segundos, %d de magia" % [ceili(run_seconds - _time_left), _magic])
+			#Contra _total_seconds y no contra run_seconds: con tiempo comprado, restar el
+			#valor de la escena daría un "tardaste" negativo.
+			print("[RunState] ✅ VICTORIA — mugre eliminada en %d segundos, %d de magia" % [ceili(_total_seconds - _time_left), _magic])
 
 		run_won.emit(_magic)
 		return
