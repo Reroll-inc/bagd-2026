@@ -129,7 +129,6 @@ func _update_facing() -> void:
 
 # ═══════════════ ANIMACIÓN ═══════════════
 
-
 # Traductor entre gameplay y presentación: la máquina de estados decide QUÉ está
 # haciendo la maga, esto decide CÓMO se ve. Están separados para que sumar un clip no
 # obligue a tocar la física, ni al revés. Sin esta división, cada animación nueva
