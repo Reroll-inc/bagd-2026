@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cc3sm0hcjrrun"]
 
+[ext_resource type="Script" uid="uid://ck57s5j084vs7" path="res://game/UI/victory.gd" id="1_1p6re"]
 [ext_resource type="Texture2D" uid="uid://d3yca0hw8xtga" path="res://game/UI/Assets/back_1.png" id="1_44ywq"]
 [ext_resource type="Texture2D" uid="uid://cyax7glij0i2e" path="res://assets/player-animations/idle/idle0000.png" id="1_51qut"]
 [ext_resource type="Texture2D" uid="uid://bev0llxbsvid4" path="res://game/UI/Assets/moon_half.png" id="1_4115r"]
@@ -190,6 +191,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_1p6re")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1512590057]
 layout_mode = 1

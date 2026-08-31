@@ -20,10 +20,17 @@ signal run_lost(magic: int)
 ##Emitida cada vez que cambia la magia acumulada.
 signal magic_changed(total: int)
 
+##Emitida cada vez que desaparece un parche, y una vez al empezar. Es lo que mide el
+##progreso hacia la victoria: cuántos quedan de cuántos había.
+signal dirt_changed(patches_left: int, patches_total: int)
+
 #tiempo total del nivel
 @export_range(5.0, 600.0, 1.0) var run_seconds: float = 60.0
 
-##Magia que hay que juntar antes de que se acabe el tiempo.
+##YA NO DECIDE LA VICTORIA. Se gana eliminando toda la mugre, no juntando magia;
+##la magia pasó a ser la moneda con la que se compran mejoras. Sobrevive como número
+##de referencia para balancear (cuánta magia rinde el nivel) y porque borrar el @export
+##dejaría un valor huérfano guardado en los .tscn de los niveles. Podar post-jam.
 @export_range(1,1000,1) var magic_goal: int = 15
 
 ##Para probar el resto de los sistemas sin el reloj encima.
@@ -45,6 +52,12 @@ var _magic: int = 0
 
 #Toda la magia que el nivel puede llegar a dar
 var _magic_available: int = 0
+
+#Parches que quedan por eliminar. Llegar a 0 ES la victoria.
+var _patches_left: int = 0
+
+#Cuántos había al empezar. Fijo durante toda la run: es el divisor del progreso.
+var _patches_total: int = 0
 
 func _ready() -> void:
 	_time_left = run_seconds
@@ -89,6 +102,16 @@ func is_running() -> bool:
 func get_magic() -> int:
 	return _magic
 
+
+##Parches que quedan en pie.
+func get_patches_left() -> int:
+	return _patches_left
+
+
+##Parches que había al arrancar la run.
+func get_patches_total() -> int:
+	return _patches_total
+
 #TODA run termina acá, gane o pierda.
 func _end_run(won: bool) -> void:
 	if not _running:
@@ -98,13 +121,13 @@ func _end_run(won: bool) -> void:
 
 	if won:
 		if print_events:
-			print("[RunState] ✅ VICTORIA — %d de magia en %d segundos" % [_magic, ceili(run_seconds - _time_left)])
-		
+			print("[RunState] ✅ VICTORIA — mugre eliminada en %d segundos, %d de magia" % [ceili(run_seconds - _time_left), _magic])
+
 		run_won.emit(_magic)
 		return
 
 	if print_events:
-		print("[RunState] ❌ DERROTA — %d de %d de magia. Reiniciando nivel." % [_magic, magic_goal])
+		print("[RunState] ❌ DERROTA — quedaban %d de %d parches, %d de magia." % [_patches_left, _patches_total, _magic])
 
 	run_lost.emit(_magic)
 
@@ -129,30 +152,55 @@ func _connect_to_dirt() -> void:
 			continue
 
 		patch.cleaned.connect(_on_dirt_cleaned)
+
+		#'depleted' se emite una sola vez por parche, justo antes de su queue_free().
+		#Es la señal de la victoria; 'cleaned' llega en CADA golpe y solo suma magia.
+		patch.depleted.connect(_on_dirt_depleted)
+
 		connected += 1
 
 		if patch.data != null:
 			_magic_available += patch.get_passes_left() * patch.data.magic_per_pass
 
-	if print_events:
-		print("[RunState] escuchando %d parches — %d de magia disponible, objetivo %d" % [connected, _magic_available, magic_goal])
+	#Se cuentan los parches CONECTADOS, no los del grupo: un nodo que esté en el grupo
+	#sin ser un Dirt nunca va a emitir 'depleted', y contarlo dejaría el nivel inganable.
+	_patches_total = connected
+	_patches_left = connected
 
-	if magic_goal > _magic_available:
-		push_warning("RunState: objetivo %d pero el nivel solo da %d de magia. Nivel Inganable." % [magic_goal, _magic_available])
+	dirt_changed.emit(_patches_left, _patches_total)
+
+	if print_events:
+		print("[RunState] escuchando %d parches — %d de magia disponible" % [connected, _magic_available])
 
 
 
 func _on_dirt_cleaned(magic: int) -> void:
 	if not _running:
 		return
-	
+
 	_magic += magic
 	magic_changed.emit(_magic)
 
 	if print_events:
-		print("[RunState] magia %d/%d (+%d)" % [_magic, magic_goal, magic])
+		print("[RunState] magia %d (+%d)" % [_magic, magic])
 
-	if _magic >= magic_goal:
+
+#Un parche desapareció del nivel. Cuando no queda ninguno, la run está ganada.
+func _on_dirt_depleted() -> void:
+	if not _running:
+		return
+
+	#maxi() como piso: si alguna vez llegaran dos 'depleted' del mismo parche, el
+	#contador no se va a negativo y la victoria sigue disparándose una sola vez —
+	#de eso ya se ocupa la guarda de _running en _end_run().
+	_patches_left = maxi(_patches_left - 1, 0)
+
+	dirt_changed.emit(_patches_left, _patches_total)
+
+	if print_events:
+		print("[RunState] mugre %d/%d restante" % [_patches_left, _patches_total])
+
+	if _patches_left <= 0:
 		_end_run(true)
 
 

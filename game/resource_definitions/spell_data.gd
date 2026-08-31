@@ -21,3 +21,15 @@ extends Resource
 @export_range(0, 100) var energy_cost: int = 0
 
 @export var texture: Texture2D
+
+
+@export_group("Limpieza directa")
+
+#para que el jugador tenga una segunda vía de limpiar ahora que se gana eliminando TODA la
+#mugre. Se apaga poniendo cleaning_power en 0: el hechizo vuelve a solo animar.
+@export_range(0, 20) var cleaning_power: int = 1
+
+#Es un factor sobre la magia normal del parche, no
+#un número aparte: así balancear magic_per_pass sigue moviendo las dos vías a la vez.
+#0.5 = el hechizo rinde la mitad que la escoba por cada pase que saca.
+@export_range(0.0, 1.0, 0.05) var magic_scale: float = 0.5

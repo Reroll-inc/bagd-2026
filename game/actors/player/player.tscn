@@ -35,6 +35,7 @@ script = ExtResource("3_em52k")
 arc_max_deg = 130.0
 hand_offset = Vector2(30, 10)
 spell = ExtResource("4_p81wk")
+cast_cooldown = 1.5
 
 [node name="Muzzle" type="Marker2D" parent="WandPivot" unique_id=2116703451]
 position = Vector2(90, 0)

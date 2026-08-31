@@ -24,6 +24,10 @@ extends Node
 ##Pantalla de victoria. Misma forma que la de derrota, más la magia juntada.
 @export var victory_scene: PackedScene
 
+##Tienda de mejoras. Es lo que se muestra cuando se acaba el tiempo, en lugar de la
+##pantalla de derrota.
+@export var shop_scene: PackedScene
+
 @export var print_events: bool = true
 
 @onready var _level_container: Node2D = $LevelContainer
@@ -76,6 +80,7 @@ func go_to_menu() -> void:
 
 	menu.play_pressed.connect(start_game)
 	menu.controls_pressed.connect(go_to_controls)
+
 
 	if print_events:
 		print("[Main] menú")
@@ -154,6 +159,7 @@ func _load_level() -> void:
 
 	_hud.bind_run_state(run_state)
 
+
 	if print_events:
 		print("[Main] nivel cargado")
 
@@ -200,6 +206,13 @@ func _finish_run(won: bool, magic: int) -> void:
 	_run_finished = true
 	get_tree().paused = true
 
+	#La magia se acredita acá y en ningún otro lado: es el único punto por el que pasan
+	#las dos salidas de una run. Se cobra también al perder, porque limpiar cuesta lo
+	#mismo se llegue o no al final.
+	#Reintentar el mismo nivel vuelve a pagar toda su magia. Farmear repitiendo es
+	#posible y hoy nada lo impide; para la jam se asume.
+	PlayerProgress.add_magic(magic)
+
 	if won:
 		var victory: VictoryScreen = _show_screen(victory_scene) as VictoryScreen
 
@@ -212,13 +225,18 @@ func _finish_run(won: bool, magic: int) -> void:
 		victory.menu_pressed.connect(go_to_menu)
 		return
 
-	var defeat: GameOverScreen = _show_screen(game_over_scene) as GameOverScreen
+	#Se acabó el tiempo. Ya no es una derrota seca: el jugador se lleva la magia que juntó
+	#y la gasta antes de la ronda siguiente.
+	#game_over_scene quedó sin uso por esto. No se borra: es escena del equipo.
+	var shop: ShopScreen = _show_screen(shop_scene) as ShopScreen
 
-	if defeat == null:
-		push_error("Main: game_over_scene está vacío, o su raíz no tiene el script game_over.gd.")
+	if shop == null:
+		push_error("Main: shop_scene está vacío, o su raíz no tiene el script shop.gd. Ojo que mejoras.tscn venía con game_over.gd puesto.")
 		return
 
-	#Reintentar recarga el mismo nivel; volver al título descarta la partida. Las dos
-	#despausan por su cuenta, en _load_level() y en go_to_menu().
-	defeat.play_again_pressed.connect(start_game)
-	defeat.menu_pressed.connect(go_to_menu)
+	#Seguir arranca una ronda NUEVA con el nivel completo, no la misma partida donde
+	#quedó: el nivel se reinstancia entero y con él su RunState. Las mejoras compradas
+	#son lo único que cruza de una ronda a la otra.
+	#Las dos salidas despausan por su cuenta, en _load_level() y en go_to_menu().
+	shop.continue_pressed.connect(start_game)
+	shop.menu_pressed.connect(go_to_menu)
