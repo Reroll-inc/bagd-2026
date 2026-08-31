@@ -138,7 +138,7 @@ func _load_level() -> void:
 	if level_scene == null:
 		push_error("Main sin level_scene asignado: no hay nada que cargar.")
 		return
-	
+
 	get_tree().paused = false
 	_run_finished = false
 	_hud.hide_end_message()
@@ -240,6 +240,23 @@ func _on_run_lost(magic: int) -> void:
 	_finish_run(false, magic)
 
 
+#Ganar termina la PARTIDA, no solo la run: magia y mejoras se borran, y lo que venga
+#después arranca de cero. Por eso el reset va acá y no en go_to_menu() ni en start_game(),
+#que también los usa el flujo de la tienda, donde el progreso tiene que sobrevivir.
+#
+#El reset va ANTES de cargar el nivel a propósito: RunState lee el tiempo comprado en su
+#_ready() y el BroomSpawner lee las escobas compradas. Reseteando después, la primera
+#ronda de la partida nueva arrancaría con las mejoras de la partida anterior.
+func _on_victory_play_again() -> void:
+	PlayerProgress.reset()
+	start_game()
+
+
+func _on_victory_menu() -> void:
+	PlayerProgress.reset()
+	go_to_menu()
+
+
 #Punto único de salida de una run, igual que _end_run() en RunState. Los dos finales
 #terminan en una pantalla con los mismos dos botones; lo único que cambia es cuál.
 func _finish_run(won: bool, magic: int) -> void:
@@ -261,8 +278,12 @@ func _finish_run(won: bool, magic: int) -> void:
 			return
 
 		victory.show_magic(magic)
-		victory.play_again_pressed.connect(start_game)
-		victory.menu_pressed.connect(go_to_menu)
+
+		#Las DOS salidas de la victoria borran el progreso. No se conectan directo a
+		#start_game()/go_to_menu() como las de la tienda justamente por eso: ganar cierra
+		#la partida, perder la continúa.
+		victory.play_again_pressed.connect(_on_victory_play_again)
+		victory.menu_pressed.connect(_on_victory_menu)
 		return
 
 	#Se acabó el tiempo. Ya no es una derrota seca: el jugador se lleva la magia que juntó

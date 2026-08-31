@@ -156,9 +156,15 @@ position = Vector2(3193, 1039)
 [node name="Dirt8" parent="." unique_id=2138489263 instance=ExtResource("5_q1hu1")]
 position = Vector2(1442, 1039)
 
+[node name="Dirt9" parent="." unique_id=1466772107 instance=ExtResource("5_q1hu1")]
+position = Vector2(1162, 1039)
+
+[node name="Dirt10" parent="." unique_id=229585971 instance=ExtResource("5_q1hu1")]
+position = Vector2(1626, 1039)
+
 [node name="RunState" type="Node" parent="." unique_id=1597719107]
 script = ExtResource("5_3m0nd")
-run_seconds = 15.0
+run_seconds = 30.0
 magic_goal = 120
 
 [node name="DirtSpawner" type="Node2D" parent="." unique_id=640265732]
@@ -212,6 +218,18 @@ position = Vector2(2892, 1039)
 
 [node name="Spawn16" type="Marker2D" parent="DirtSpawner" unique_id=606645297]
 position = Vector2(2708, 1039)
+
+[node name="Spawn17" type="Marker2D" parent="DirtSpawner" unique_id=1146479078]
+position = Vector2(2543, 1039)
+
+[node name="Spawn18" type="Marker2D" parent="DirtSpawner" unique_id=1147678201]
+position = Vector2(2000, 1039)
+
+[node name="Spawn19" type="Marker2D" parent="DirtSpawner" unique_id=324307590]
+position = Vector2(3572, 1039)
+
+[node name="Spawn20" type="Marker2D" parent="DirtSpawner" unique_id=2046718939]
+position = Vector2(3030, 1039)
 
 [node name="BroomSpawner" type="Node2D" parent="." unique_id=590878635]
 script = ExtResource("15_hp2rm")
