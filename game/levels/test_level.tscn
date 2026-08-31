@@ -158,6 +158,7 @@ position = Vector2(1442, 1039)
 
 [node name="RunState" type="Node" parent="." unique_id=1597719107]
 script = ExtResource("5_3m0nd")
+run_seconds = 15.0
 magic_goal = 120
 
 [node name="DirtSpawner" type="Node2D" parent="." unique_id=640265732]
@@ -224,3 +225,6 @@ position = Vector2(2558, 903)
 
 [node name="BroomSpawn3" type="Marker2D" parent="BroomSpawner" unique_id=367159743]
 position = Vector2(3982, 903)
+
+[node name="BroomSpawn4_Auto" type="Marker2D" parent="BroomSpawner" unique_id=478165993]
+position = Vector2(2056, 903)

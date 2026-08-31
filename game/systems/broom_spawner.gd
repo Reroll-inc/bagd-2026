@@ -40,7 +40,10 @@ func _ready() -> void:
 #La escoba nueva corre su _ready() al entrar al árbol, y ahí se anota sola en el grupo
 #"tools". Aparece un frame después de que el nivel se carga, que a ojo no se nota.
 func _spawn_purchased_brooms() -> void:
-	var wanted: int = PlayerProgress.get_extra_brooms()
+	#La automática ocupa un punto más, después de las normales. Se cuenta acá para que
+	#todas las validaciones de abajo la incluyan y no aparezca encimada con otra.
+	var auto: int = 1 if PlayerProgress.has_auto_broom() else 0
+	var wanted: int = PlayerProgress.get_extra_brooms() + auto
 
 	if wanted <= 0:
 		return
@@ -78,6 +81,10 @@ func _spawn_purchased_brooms() -> void:
 			push_error("BroomSpawner: broom_scene no tiene el script cleaning_tool.gd en su raíz.")
 			return
 
+		#La ÚLTIMA es la automática, si se compró. Se marca antes del add_child() para
+		#que su _ready() ya la vea autónoma: ahí es donde se despierta sola.
+		broom.autonomous = auto > 0 and i == spawned - 1
+
 		level.add_child(broom)
 
 		#global_position y no position: se asigna DESPUÉS del add_child() porque hasta
@@ -85,7 +92,7 @@ func _spawn_purchased_brooms() -> void:
 		broom.global_position = points[i].global_position
 
 	if print_events:
-		print("[BroomSpawner] %d escoba(s) compradas puestas en %d puntos" % [spawned, points.size()])
+		print("[BroomSpawner] %d escoba(s) puestas en %d puntos (automáticas: %d)" % [spawned, points.size(), auto])
 
 
 func _collect_points() -> Array[Marker2D]:

@@ -46,9 +46,9 @@ const BASE_COST: Dictionary[Upgrade, int] = {
 ##Nombre que ve el jugador. Vive acá y no en la escena de la tienda para que agregar una
 ##mejora sea tocar un solo archivo.
 const UPGRADE_NAME: Dictionary[Upgrade, String] = {
-	Upgrade.EXTRA_BROOM: "Otra escoba",
-	Upgrade.BONUS_TIME: "Más tiempo",
-	Upgrade.FASTER_CAST: "Hechizo más rápido",
+	Upgrade.EXTRA_BROOM: "Escoba extra",
+	Upgrade.BONUS_TIME: "Tiempo extra",
+	Upgrade.FASTER_CAST: "Reduce cooldown",
 	Upgrade.AUTO_BROOM: "Escoba automática",
 }
 

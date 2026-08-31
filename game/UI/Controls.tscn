@@ -249,4 +249,37 @@ vertical_alignment = 1
 [node name="Label" type="Label" parent="Controls/D2" unique_id=1299670248]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Clic derecho — Disparar"
+text = "Clic izquierdo — Disparar"
+
+[node name="D3" type="HBoxContainer" parent="Controls" unique_id=1433486091]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="TextureRect" type="TextureRect" parent="Controls/D3" unique_id=517835799]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_ba6dt")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Controls/D3/TextureRect" unique_id=833227778]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -42.5
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.14901961, 0.12941177, 0.18039216, 1)
+theme_override_font_sizes/font_size = 62
+text = "🖱"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Controls/D3" unique_id=458460502]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Clic derecho — Guiar escoba"
