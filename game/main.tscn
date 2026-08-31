@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ck082nashst2" path="res://game/main.gd" id="1_xtpaf"]
 [ext_resource type="PackedScene" uid="uid://ceykjxp5q6et4" path="res://game/levels/test_level.tscn" id="2_vop5m"]
-[ext_resource type="PackedScene" uid="uid://chl8nt8rp0y0o" path="res://game/ui/hud.tscn" id="3_emt18"]
-[ext_resource type="PackedScene" uid="uid://ms1svicuhsu2" path="res://game/ui/main_menu.tscn" id="3_vop5m"]
-[ext_resource type="PackedScene" uid="uid://bynrtdl5pvqk4" path="res://game/ui/Controls.tscn" id="4_5un7r"]
-[ext_resource type="PackedScene" uid="uid://cb530kk5iqkng" path="res://game/ui/game_over.tscn" id="5_dgpao"]
-[ext_resource type="PackedScene" uid="uid://cpjthpjqwu6ej" path="res://game/ui/victory.tscn" id="6_wjctj"]
+[ext_resource type="PackedScene" uid="uid://chl8nt8rp0y0o" path="res://game/UI/hud.tscn" id="3_emt18"]
+[ext_resource type="PackedScene" uid="uid://ms1svicuhsu2" path="res://game/UI/main_menu.tscn" id="3_vop5m"]
+[ext_resource type="PackedScene" uid="uid://bynrtdl5pvqk4" path="res://game/UI/Controls.tscn" id="4_5un7r"]
+[ext_resource type="PackedScene" uid="uid://cb530kk5iqkng" path="res://game/UI/mejoras.tscn" id="5_dgpao"]
+[ext_resource type="PackedScene" uid="uid://cpjthpjqwu6ej" path="res://game/UI/victory.tscn" id="6_wjctj"]
 
 [node name="Main" type="Node" unique_id=790870284]
 script = ExtResource("1_xtpaf")

@@ -1,0 +1,224 @@
+[gd_scene format=3 uid="uid://cb530kk5iqkng"]
+
+[ext_resource type="Script" uid="uid://bmgs1cfbgk5af" path="res://game/UI/game_over.gd" id="1_ca4ac"]
+[ext_resource type="Texture2D" uid="uid://bbie2a8sl2ugb" path="res://game/UI/Assets/buttonSquare_grey.png" id="2_dl5fr"]
+[ext_resource type="Texture2D" uid="uid://dnjapws4q1t2a" path="res://assets/broom.png" id="3_l07ks"]
+[ext_resource type="Texture2D" uid="uid://7uclpouhhim" path="res://game/UI/Assets/buttonSquare_blue.png" id="4_4pvp3"]
+[ext_resource type="Texture2D" uid="uid://uq7claghu514" path="res://game/UI/Assets/iconCircle_grey.png" id="5_i8v46"]
+[ext_resource type="Texture2D" uid="uid://42cnclvmwmq0" path="res://game/decorations/cobweb.png" id="6_4pvp3"]
+[ext_resource type="Texture2D" uid="uid://d2c7phh4ja58i" path="res://assets/placeholder/dust.png" id="7_i8v46"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_duskp"]
+texture = ExtResource("2_dl5fr")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pxd0e"]
+texture = ExtResource("4_4pvp3")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[node name="Mejoras" type="Control" unique_id=1648058307]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ca4ac")
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=206907047]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.039215688, 0.03137255, 0.078431375, 1)
+
+[node name="TitleSubTiitle" type="VBoxContainer" parent="." unique_id=1946441725]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelsMargin" type="MarginContainer" parent="TitleSubTiitle" unique_id=2144266476]
+layout_mode = 2
+theme_override_constants/margin_top = 44
+
+[node name="Titulo" type="Label" parent="TitleSubTiitle" unique_id=1703815993]
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
+theme_override_font_sizes/font_size = 64
+text = "POTENCIÁ TUS PODERES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="TitleSubTiitle" unique_id=2093519571]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7490196, 0.72156864, 0.8509804, 1)
+theme_override_font_sizes/font_size = 36
+text = "Elegí bien — no vas a tener otra chance
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Puntaje" type="Label" parent="TitleSubTiitle" unique_id=947374046]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.54901963, 0.4, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "Tenés: 45 pts
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mejoras" type="VBoxContainer" parent="." unique_id=560191151]
+custom_minimum_size = Vector2(0, 140)
+custom_maximum_size = Vector2(100, -1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 600.0
+offset_top = 400.0
+offset_right = -1220.0
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Escoba" type="HBoxContainer" parent="Mejoras" unique_id=2097046812]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="ToolEscoba" type="Button" parent="Mejoras/Escoba" unique_id=1151265964]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_duskp")
+
+[node name="Icon" type="TextureRect" parent="Mejoras/Escoba/ToolEscoba" unique_id=384814738]
+custom_maximum_size = Vector2(80, 100)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 1.0
+offset_right = 90.0
+offset_bottom = 101.0
+texture = ExtResource("3_l07ks")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Mejoras/Escoba" unique_id=1743665340]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.81960785, 0.61960787, 0.21960784, 1)
+theme_override_font_sizes/font_size = 32
+text = "Escoba mejorada    — 30 pts"
+
+[node name="Cooldown" type="HBoxContainer" parent="Mejoras" unique_id=1522221084]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="ToolCooldown" type="Button" parent="Mejoras/Cooldown" unique_id=842104835]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_duskp")
+
+[node name="Icon" type="TextureRect" parent="Mejoras/Cooldown/ToolCooldown" unique_id=300394428]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 43.0
+offset_right = 71.0
+offset_bottom = 83.0
+texture = ExtResource("5_i8v46")
+
+[node name="Label" type="Label" parent="Mejoras/Cooldown" unique_id=1896302928]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.81960785, 0.61960787, 0.21960784, 1)
+theme_override_font_sizes/font_size = 32
+text = "Reduce cooldown    — 45 pts"
+
+[node name="Time" type="HBoxContainer" parent="Mejoras" unique_id=1226476799]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="ToolTime" type="Button" parent="Mejoras/Time" unique_id=1161234307]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_pxd0e")
+
+[node name="Icon" type="Label" parent="Mejoras/Time/ToolTime" unique_id=2064052396]
+modulate = Color(1, 1, 1, 0.49803922)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 25.0
+offset_right = 92.0
+offset_bottom = 107.0
+theme_override_font_sizes/font_size = 56
+text = "⏳"
+
+[node name="Label" type="Label" parent="Mejoras/Time" unique_id=78555397]
+modulate = Color(1, 1, 1, 0.47058824)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "+60 tiempo         — 60 pts"
+
+[node name="Cobweb" type="TextureRect" parent="." unique_id=345433574]
+layout_mode = 0
+offset_left = 1673.0
+offset_top = -284.0
+offset_right = 1811.0
+offset_bottom = 416.0
+texture = ExtResource("6_4pvp3")
+
+[node name="Broom" type="TextureRect" parent="." unique_id=977213176]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = 590.0
+offset_right = -1542.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_l07ks")
+stretch_mode = 5
+
+[node name="Dust" type="TextureRect" parent="." unique_id=1904795774]
+custom_maximum_size = Vector2(120, -1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 266.0
+offset_top = 1008.0
+offset_right = -1534.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_i8v46")
+stretch_mode = 5
+
+[node name="Dust2" type="TextureRect" parent="." unique_id=1534394631]
+custom_maximum_size = Vector2(120, -1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 146.0
+offset_top = 1020.0
+offset_right = -1654.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_i8v46")
+stretch_mode = 5

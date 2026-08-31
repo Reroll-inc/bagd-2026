@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://bynrtdl5pvqk4"]
 
-[ext_resource type="Script" uid="uid://ducfd4tbrva0n" path="res://game/ui/controls.gd" id="1_gudqt"]
+[ext_resource type="Script" uid="uid://ducfd4tbrva0n" path="res://game/UI/controls.gd" id="1_gudqt"]
+[ext_resource type="Texture2D" uid="uid://bbie2a8sl2ugb" path="res://game/UI/Assets/buttonSquare_grey.png" id="2_ba6dt"]
+[ext_resource type="Texture2D" uid="uid://cyax7glij0i2e" path="res://assets/player-animations/idle/idle0000.png" id="2_nrvqr"]
+[ext_resource type="Texture2D" uid="uid://dnjapws4q1t2a" path="res://assets/broom.png" id="3_ui8pd"]
+[ext_resource type="Texture2D" uid="uid://d2c7phh4ja58i" path="res://assets/placeholder/dust.png" id="4_l8mve"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_73mxt"]
 bg_color = Color(0.21960784, 0.18039216, 0.29803923, 1)
@@ -39,6 +43,64 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.039215688, 0.03137255, 0.078431375, 1)
 
+[node name="MainCharacter" type="TextureRect" parent="Fondo" unique_id=1557855994]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1377.0
+offset_top = 478.0
+offset_right = -143.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_nrvqr")
+stretch_mode = 5
+
+[node name="Broom" type="TextureRect" parent="Fondo" unique_id=1628364511]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 195.0
+offset_top = 583.0
+offset_right = -1327.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ui8pd")
+stretch_mode = 5
+
+[node name="Dust" type="TextureRect" parent="Fondo" unique_id=2006464065]
+custom_maximum_size = Vector2(120, -1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 481.0
+offset_top = 1001.0
+offset_right = -1319.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_l8mve")
+stretch_mode = 5
+
+[node name="Dust2" type="TextureRect" parent="Fondo" unique_id=155433005]
+custom_maximum_size = Vector2(120, -1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 361.0
+offset_top = 1013.0
+offset_right = -1439.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_l8mve")
+stretch_mode = 5
+
 [node name="TitleSubTiitle" type="VBoxContainer" parent="." unique_id=61427914]
 layout_mode = 1
 anchors_preset = 15
@@ -57,7 +119,7 @@ layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
 theme_override_font_sizes/font_size = 64
-text = "CONTROLS"
+text = "CONTROLES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -74,3 +136,117 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_73mxt")
 theme_override_styles/hover = SubResource("StyleBoxFlat_asnww")
 text = "←"
 icon_alignment = 1
+
+[node name="Controls" type="VBoxContainer" parent="." unique_id=1549632120]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -295.5
+offset_top = -196.0
+offset_right = 295.5
+offset_bottom = 196.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 46
+
+[node name="A" type="HBoxContainer" parent="Controls" unique_id=1034936593]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="TextureRect" type="TextureRect" parent="Controls/A" unique_id=815880446]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_ba6dt")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Controls/A/TextureRect" unique_id=1055843534]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -42.5
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.14901961, 0.12941177, 0.18039216, 1)
+theme_override_font_sizes/font_size = 62
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Controls/A" unique_id=766797115]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Mover izquierda"
+
+[node name="D" type="HBoxContainer" parent="Controls" unique_id=265692448]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="TextureRect" type="TextureRect" parent="Controls/D" unique_id=1123742951]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_ba6dt")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Controls/D/TextureRect" unique_id=263043990]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -42.5
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.14901961, 0.12941177, 0.18039216, 1)
+theme_override_font_sizes/font_size = 62
+text = "d"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Controls/D" unique_id=1764248627]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Mover derecha"
+
+[node name="D2" type="HBoxContainer" parent="Controls" unique_id=340339072]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="TextureRect" type="TextureRect" parent="Controls/D2" unique_id=67135123]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_ba6dt")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Controls/D2/TextureRect" unique_id=221731376]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -42.5
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.14901961, 0.12941177, 0.18039216, 1)
+theme_override_font_sizes/font_size = 62
+text = "🖱"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="Controls/D2" unique_id=1299670248]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Clic derecho — Disparar"
