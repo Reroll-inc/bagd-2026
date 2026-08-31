@@ -121,7 +121,32 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_colors/font_color = Color(0.81960785, 0.61960787, 0.21960784, 1)
 theme_override_font_sizes/font_size = 32
-text = "Escoba mejorada    — 30 pts"
+text = "Escoba extra    — 30 pts"
+
+[node name="Escoba2" type="HBoxContainer" parent="Mejoras" unique_id=438749824]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="ToolAuto" type="Button" parent="Mejoras/Escoba2" unique_id=1602157476]
+custom_minimum_size = Vector2(100, 120)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_duskp")
+
+[node name="Icon" type="TextureRect" parent="Mejoras/Escoba2/ToolAuto" unique_id=449090662]
+custom_maximum_size = Vector2(80, 100)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 1.0
+offset_right = 90.0
+offset_bottom = 101.0
+texture = ExtResource("3_l07ks")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Mejoras/Escoba2" unique_id=1520043275]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.81960785, 0.61960787, 0.21960784, 1)
+theme_override_font_sizes/font_size = 32
+text = "Escoba automática    — 30 pts"
 
 [node name="Cooldown" type="HBoxContainer" parent="Mejoras" unique_id=1522221084]
 layout_mode = 2
@@ -169,7 +194,7 @@ text = "⏳"
 modulate = Color(1, 1, 1, 0.47058824)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "+60 tiempo         — 60 pts"
+text = "tiempo extra         — 60 pts"
 
 [node name="Cobweb" type="TextureRect" parent="." unique_id=345433574]
 layout_mode = 0
