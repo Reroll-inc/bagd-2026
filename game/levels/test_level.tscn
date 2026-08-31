@@ -162,6 +162,21 @@ position = Vector2(1162, 1039)
 [node name="Dirt10" parent="." unique_id=229585971 instance=ExtResource("5_q1hu1")]
 position = Vector2(1626, 1039)
 
+[node name="Dirt11" parent="." unique_id=76694821 instance=ExtResource("5_q1hu1")]
+position = Vector2(1741, 1039)
+
+[node name="Dirt12" parent="." unique_id=8464903 instance=ExtResource("5_q1hu1")]
+position = Vector2(2210, 1039)
+
+[node name="Dirt13" parent="." unique_id=1254754568 instance=ExtResource("5_q1hu1")]
+position = Vector2(2651, 1039)
+
+[node name="Dirt14" parent="." unique_id=1100517826 instance=ExtResource("5_q1hu1")]
+position = Vector2(2876, 1039)
+
+[node name="Dirt15" parent="." unique_id=652367054 instance=ExtResource("5_q1hu1")]
+position = Vector2(3446, 1039)
+
 [node name="RunState" type="Node" parent="." unique_id=1597719107]
 script = ExtResource("5_3m0nd")
 run_seconds = 30.0
@@ -230,6 +245,36 @@ position = Vector2(3572, 1039)
 
 [node name="Spawn20" type="Marker2D" parent="DirtSpawner" unique_id=2046718939]
 position = Vector2(3030, 1039)
+
+[node name="Spawn21" type="Marker2D" parent="DirtSpawner" unique_id=1230751425]
+position = Vector2(3117, 1039)
+
+[node name="Spawn22" type="Marker2D" parent="DirtSpawner" unique_id=673791310]
+position = Vector2(388, 1039)
+
+[node name="Spawn23" type="Marker2D" parent="DirtSpawner" unique_id=127873250]
+position = Vector2(654, 1039)
+
+[node name="Spawn24" type="Marker2D" parent="DirtSpawner" unique_id=734738803]
+position = Vector2(2070, 1039)
+
+[node name="Spawn25" type="Marker2D" parent="DirtSpawner" unique_id=1891597334]
+position = Vector2(154, 1039)
+
+[node name="Spawn26" type="Marker2D" parent="DirtSpawner" unique_id=1238826341]
+position = Vector2(3673, 1039)
+
+[node name="Spawn27" type="Marker2D" parent="DirtSpawner" unique_id=1678161461]
+position = Vector2(1050, 1039)
+
+[node name="Spawn28" type="Marker2D" parent="DirtSpawner" unique_id=1218534689]
+position = Vector2(4032, 1039)
+
+[node name="Spawn29" type="Marker2D" parent="DirtSpawner" unique_id=523557852]
+position = Vector2(1362, 1039)
+
+[node name="Spawn30" type="Marker2D" parent="DirtSpawner" unique_id=1494492690]
+position = Vector2(1550, 1039)
 
 [node name="BroomSpawner" type="Node2D" parent="." unique_id=590878635]
 script = ExtResource("15_hp2rm")

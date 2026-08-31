@@ -78,6 +78,12 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_area_entered(area: Area2D) -> void:
 	var dirt: Dirt = area as Dirt
 
+	#Un parche agotado se ATRAVIESA sin gastar el hechizo. Dirt ya le apaga el collider al
+	#morir, pero con set_deferred eso recién surte efecto el frame siguiente: sin esta
+	#guarda, los impactos de ese frame intermedio siguen matando el proyectil.
+	if dirt != null and dirt.dead:
+		return
+
 	if dirt != null and dirt.data != null and dirt.data.type == _spell.animates:
 		dirt.clean(_spell.cleaning_power, _spell.magic_scale)
 

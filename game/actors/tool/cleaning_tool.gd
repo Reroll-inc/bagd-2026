@@ -247,6 +247,13 @@ func _find_nearest_dirt() -> Dirt:
 		if dirt == null or dirt.data == null:
 			continue
 
+		#Un parche agotado ya no se borra del árbol: se apaga con 'dead' y sigue en el
+		#grupo. Sin este filtro la escoba autónoma caminaría hasta parches ya limpios,
+		#descubriría al llegar que no hay nada que hacer y perdería reloj una vez por
+		#cada uno. Mismo criterio que _find_dirt_in_range().
+		if dirt.dead:
+			continue
+
 		if dirt.data.type != data.cleans:
 			continue
 
@@ -362,7 +369,10 @@ func _find_dirt_in_range() -> Dirt:
 	for node: Node in get_tree().get_nodes_in_group(Dirt.GROUP):
 		var dirt: Dirt = node as Dirt
 
-		if dirt.dead or dirt == null or dirt.data == null:
+		#El null va PRIMERO: 'or' evalúa de izquierda a derecha y corta apenas algo da
+		#true, así que preguntar por dirt.dead antes de saber si dirt existe revienta
+		#el día que alguien meta en el grupo "dirt" un nodo que no es un Dirt.
+		if dirt == null or dirt.data == null or dirt.dead:
 			continue
 
 		if dirt.data.type != data.cleans:

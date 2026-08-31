@@ -25,7 +25,13 @@ var _passes_left: int = 0
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var cleanSfx : AudioStreamPlayer2D = $CleanSfx
+
+#Se apaga cuando el parche se agota. Desde que el nodo ya no se destruye, esta bandera
+#es lo ÚNICO que distingue un parche vivo de uno limpio: quien recorra el grupo "dirt"
+#tiene que consultarla.
 var dead = false
+
+@onready var _collider: CollisionShape2D = $CollisionShape2D
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -78,7 +84,15 @@ func clean(power: int, magic_scale: float = 1.0) -> int:
 		depleted.emit()
 		sprite.visible = false
 		dead = true
-	
+
+		#Esconder el sprite no saca al parche del mundo físico: el Area2D sigue detectando.
+		#Sin esto el hechizo choca contra mugre invisible y se gasta, y un parche limpio
+		#entre la maga y una escoba bloquea todos los disparos.
+		#set_deferred y no asignación directa: esto corre dentro del procesamiento de
+		#física —lo llama el proyectil al impactar o la escoba en su _physics_process— y
+		#tocar 'disabled' en pleno flush de queries es un error de Godot, no una opción.
+		_collider.set_deferred(&"disabled", true)
+
 	return magic
 
 ##Cuántos golpes le quedan.
