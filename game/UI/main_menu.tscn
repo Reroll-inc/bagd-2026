@@ -164,7 +164,6 @@ texture = ExtResource("6_vc8vu")
 stretch_mode = 5
 
 [node name="TitleSubTiitle" type="VBoxContainer" parent="." unique_id=1473558420]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
