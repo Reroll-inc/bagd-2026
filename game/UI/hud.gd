@@ -29,10 +29,11 @@ extends Control
 
 var _run_state: RunState = null
 
-#Copia local del objetivo, para no depender de que _run_state siga vivo al dibujar.
-var _magic_goal: int = 0
-
-var _magic_ratio: float = 0.0
+#Cuánto del nivel está limpio, de 0 a 1. La barra mide PROGRESO HACIA LA VICTORIA, y
+#desde que se gana eliminando toda la mugre eso es la mugre eliminada, no la magia:
+#una barra que se llena de magia y no gana nada le miente al jugador.
+#Con esto la magia dejó de verse durante la run. Vuelve a pantalla en la tienda.
+var _clean_ratio: float = 0.0
 
 var _timer_normal_color: Color = Color.WHITE
 
@@ -54,15 +55,14 @@ func bind_run_state(run_state: RunState) -> void:
 	_unbind()
 
 	_run_state = run_state
-	_magic_goal = maxi(run_state.magic_goal, 1) # 📖 Nunca 0: es divisor.
 
 	_run_state.time_changed.connect(_on_time_changed)
-	_run_state.magic_changed.connect(_on_magic_changed)
+	_run_state.dirt_changed.connect(_on_dirt_changed)
 
-	
+
 	#Sin estas dos líneas el HUD arrancaría con los valores de la run anterior hasta el primer tick.
 	_on_time_changed(_run_state.get_seconds_left())
-	_on_magic_changed(_run_state.get_magic())
+	_on_dirt_changed(_run_state.get_patches_left(), _run_state.get_patches_total())
 
 
 
@@ -72,7 +72,7 @@ func _unbind() -> void:
 
 	if is_instance_valid(_run_state):
 		_run_state.time_changed.disconnect(_on_time_changed)
-		_run_state.magic_changed.disconnect(_on_magic_changed)
+		_run_state.dirt_changed.disconnect(_on_dirt_changed)
 
 	_run_state = null
 
@@ -96,8 +96,15 @@ func _on_time_changed(seconds_left: int) -> void:
 	_timer_label.add_theme_color_override(&"font_color", color)
 
 
-func _on_magic_changed(total: int) -> void:
-	_magic_ratio = clampf(float(total) / float(_magic_goal), 0.0, 1.0)
+func _on_dirt_changed(patches_left: int, patches_total: int) -> void:
+	#Un nivel sin parches daría división por cero. Se dibuja vacía en vez de reventar:
+	#el aviso de "nivel sin mugre" ya lo da RunState por push_warning.
+	if patches_total <= 0:
+		_clean_ratio = 0.0
+	else:
+		var cleaned: int = patches_total - patches_left
+		_clean_ratio = clampf(float(cleaned) / float(patches_total), 0.0, 1.0)
+
 	_refresh_energy_fill()
 
 
@@ -105,7 +112,7 @@ func _refresh_energy_fill() -> void:
 	var inset: float = _energy_fill.position.x
 	var max_width: float = maxf(_energy_track.size.x - inset * 2.0, 0.0)
 
-	_energy_fill.size.x = max_width * _magic_ratio
+	_energy_fill.size.x = max_width * _clean_ratio
 
 
 #mm:ss. La división entre enteros trunca, así que 45 / 60 da 0 y no 0.75 — que es
