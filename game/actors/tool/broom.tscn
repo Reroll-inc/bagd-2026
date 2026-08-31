@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c1lbmtrdno65o" path="res://game/actors/tool/cleaning_tool.gd" id="1_bjyja"]
 [ext_resource type="Resource" uid="uid://cm1n83mqeh1la" path="res://game/actors/tool/broom.tres" id="2_7p1hi"]
 [ext_resource type="AudioStream" uid="uid://3a8rluq1yxc3" path="res://assets/sounds/broom-activate.ogg" id="3_hpw4p"]
+[ext_resource type="AudioStream" uid="uid://dvahv4gsohorb" path="res://assets/sounds/broom-sweep.ogg" id="4_6rkqa"]
+[ext_resource type="AudioStream" uid="uid://8rbtigsgtysr" path="res://assets/sounds/broom-walk.ogg" id="5_8ybt2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6mbsr"]
 size = Vector2(36, 197)
@@ -11,6 +13,18 @@ size = Vector2(36, 197)
 random_pitch = 1.0855428
 streams_count = 1
 stream_0/stream = ExtResource("3_hpw4p")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_uweo1"]
+random_pitch = 1.3302985
+random_volume_offset_db = 4.84
+streams_count = 1
+stream_0/stream = ExtResource("4_6rkqa")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_6rkqa"]
+random_pitch = 1.3485571
+random_volume_offset_db = 2.75
+streams_count = 1
+stream_0/stream = ExtResource("5_8ybt2")
 
 [node name="Broom" type="CharacterBody2D" unique_id=803280212]
 collision_layer = 4
@@ -25,3 +39,9 @@ shape = SubResource("RectangleShape2D_6mbsr")
 
 [node name="WakeUpSfx" type="AudioStreamPlayer2D" parent="." unique_id=546076316]
 stream = SubResource("AudioStreamRandomizer_7p1hi")
+
+[node name="CleanSfx" type="AudioStreamPlayer2D" parent="." unique_id=1733013787]
+stream = SubResource("AudioStreamRandomizer_uweo1")
+
+[node name="WalkSfx" type="AudioStreamPlayer2D" parent="." unique_id=1266516196]
+stream = SubResource("AudioStreamRandomizer_6rkqa")

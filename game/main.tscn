@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://bynrtdl5pvqk4" path="res://game/UI/Controls.tscn" id="4_5un7r"]
 [ext_resource type="PackedScene" uid="uid://cb530kk5iqkng" path="res://game/UI/mejoras.tscn" id="5_dgpao"]
 [ext_resource type="PackedScene" uid="uid://cc3sm0hcjrrun" path="res://game/UI/victory-final.tscn" id="6_wjctj"]
+[ext_resource type="AudioStream" uid="uid://dk3io3dphr12j" path="res://assets/sounds/music.mp3" id="8_xkbyp"]
+[ext_resource type="Script" uid="uid://dyin6573a5lv5" path="res://game/music.gd" id="9_lx3aj"]
 
 [node name="Main" type="Node" unique_id=790870284]
 script = ExtResource("1_xtpaf")
@@ -16,6 +18,7 @@ controls_scene = ExtResource("4_5un7r")
 game_over_scene = ExtResource("5_dgpao")
 victory_scene = ExtResource("6_wjctj")
 shop_scene = ExtResource("5_dgpao")
+print_events = null
 
 [node name="GUI" type="CanvasLayer" parent="." unique_id=1355740450]
 process_mode = 3
@@ -33,3 +36,10 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="LevelContainer" type="Node2D" parent="." unique_id=2041775378]
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1388627532]
+process_mode = 3
+stream = ExtResource("8_xkbyp")
+volume_db = -13.0
+parameters/looping = true
+script = ExtResource("9_lx3aj")
