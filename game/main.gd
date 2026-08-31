@@ -77,6 +77,7 @@ func go_to_menu() -> void:
 	menu.play_pressed.connect(start_game)
 	menu.controls_pressed.connect(go_to_controls)
 
+
 	if print_events:
 		print("[Main] menú")
 
@@ -154,6 +155,7 @@ func _load_level() -> void:
 
 	_hud.bind_run_state(run_state)
 
+
 	if print_events:
 		print("[Main] nivel cargado")
 
@@ -199,6 +201,13 @@ func _on_run_lost(magic: int) -> void:
 func _finish_run(won: bool, magic: int) -> void:
 	_run_finished = true
 	get_tree().paused = true
+
+	#La magia se acredita acá y en ningún otro lado: es el único punto por el que pasan
+	#las dos salidas de una run. Se cobra también al perder, porque limpiar cuesta lo
+	#mismo se llegue o no al final.
+	#Reintentar el mismo nivel vuelve a pagar toda su magia. Farmear repitiendo es
+	#posible y hoy nada lo impide; para la jam se asume.
+	PlayerProgress.add_magic(magic)
 
 	if won:
 		var victory: VictoryScreen = _show_screen(victory_scene) as VictoryScreen
