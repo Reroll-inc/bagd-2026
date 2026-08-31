@@ -146,6 +146,12 @@ func _load_level() -> void:
 	_unload_level()
 
 	_level = level_scene.instantiate()
+
+	#Las escobas compradas las pone el BroomSpawner del nivel, en su propio _ready().
+	#Esto solo avisa si se pagaron escobas y el nivel no tiene quien las ponga: la
+	#compra cobra magia igual, y una mejora que se cobra sin efecto es peor que un error.
+	_warn_if_brooms_have_nowhere_to_go(_level)
+
 	_level_container.add_child(_level)
 
 	var run_state: RunState = _find_run_state(_level)
@@ -171,6 +177,40 @@ func _unload_level() -> void:
 	_level_container.remove_child(_level)
 	_level.queue_free()
 	_level = null
+
+
+# ═══════════════ ESCOBAS COMPRADAS ═══════════════
+
+
+#Red de seguridad, no lógica de spawn: quien pone las escobas es el BroomSpawner del
+#nivel. Existe porque el modo de fallar es silencioso — la tienda cobra la magia igual
+#y el jugador no ve ninguna escoba nueva ni ningún error.
+func _warn_if_brooms_have_nowhere_to_go(level: Node) -> void:
+	var bought: int = PlayerProgress.get_extra_brooms()
+
+	if bought <= 0:
+		return
+
+	if _find_broom_spawner(level) != null:
+		return
+
+	push_warning("Main: hay %d escoba(s) compradas pero el nivel no tiene ningún BroomSpawner. Nadie las va a poner." % bought)
+
+
+#Por TIPO y recursivo: el spawner puede colgar del nivel directamente o de un contenedor.
+func _find_broom_spawner(node: Node) -> BroomSpawner:
+	for child: Node in node.get_children():
+		var spawner: BroomSpawner = child as BroomSpawner
+
+		if spawner != null:
+			return spawner
+
+		var found: BroomSpawner = _find_broom_spawner(child)
+
+		if found != null:
+			return found
+
+	return null
 
 
 #Busca el RunState entre los hijos directos del nivel. Por TIPO y no por nombre: si

@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://4qaoylv3x25d" path="res://game/decorations/couch.png" id="7_hp2rm"]
 [ext_resource type="PackedScene" uid="uid://jv8t67xnpgw5" path="res://game/decorations/window.tscn" id="8_l0cbk"]
 [ext_resource type="Script" uid="uid://dw6el7m764m1h" path="res://game/systems/dirt_spawner.gd" id="14_tc1fy"]
+[ext_resource type="Script" uid="uid://ctm6gkkm2hf8i" path="res://game/systems/broom_spawner.gd" id="15_hp2rm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hrds"]
 texture = ExtResource("1_wxaf8")
@@ -155,12 +156,6 @@ position = Vector2(3193, 1039)
 [node name="Dirt8" parent="." unique_id=2138489263 instance=ExtResource("5_q1hu1")]
 position = Vector2(1442, 1039)
 
-[node name="Broom2" parent="." unique_id=1225574544 instance=ExtResource("4_3m0nd")]
-position = Vector2(4028, 903)
-
-[node name="Broom3" parent="." unique_id=1995014564 instance=ExtResource("4_3m0nd")]
-position = Vector2(2048, 903)
-
 [node name="RunState" type="Node" parent="." unique_id=1597719107]
 script = ExtResource("5_3m0nd")
 magic_goal = 120
@@ -216,3 +211,16 @@ position = Vector2(2892, 1039)
 
 [node name="Spawn16" type="Marker2D" parent="DirtSpawner" unique_id=606645297]
 position = Vector2(2708, 1039)
+
+[node name="BroomSpawner" type="Node2D" parent="." unique_id=590878635]
+script = ExtResource("15_hp2rm")
+broom_scene = ExtResource("4_3m0nd")
+
+[node name="BroomSpawn1" type="Marker2D" parent="BroomSpawner" unique_id=1061417187]
+position = Vector2(1172, 903)
+
+[node name="BroomSpawn2" type="Marker2D" parent="BroomSpawner" unique_id=299367902]
+position = Vector2(2558, 903)
+
+[node name="BroomSpawn3" type="Marker2D" parent="BroomSpawner" unique_id=367159743]
+position = Vector2(3982, 903)
