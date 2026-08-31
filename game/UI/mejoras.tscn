@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cb530kk5iqkng"]
 
-[ext_resource type="Script" uid="uid://bmgs1cfbgk5af" path="res://game/UI/game_over.gd" id="1_ca4ac"]
+[ext_resource type="Script" uid="uid://cpobervfwmvch" path="res://game/UI/shop.gd" id="1_4pvp3"]
 [ext_resource type="Texture2D" uid="uid://bbie2a8sl2ugb" path="res://game/UI/Assets/buttonSquare_grey.png" id="2_dl5fr"]
 [ext_resource type="Texture2D" uid="uid://dnjapws4q1t2a" path="res://assets/broom.png" id="3_l07ks"]
 [ext_resource type="Texture2D" uid="uid://7uclpouhhim" path="res://game/UI/Assets/buttonSquare_blue.png" id="4_4pvp3"]
@@ -29,7 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ca4ac")
+script = ExtResource("1_4pvp3")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=206907047]
 layout_mode = 1
