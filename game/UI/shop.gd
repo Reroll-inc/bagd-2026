@@ -33,18 +33,24 @@ const ROW_LABEL_NAME: StringName = &"Label"
 #MagicLabel es el nombre del contrato original, por si alguien rehace la pantalla.
 const MAGIC_LABEL_NAMES: Array[StringName] = [&"Puntaje", &"MagicLabel"]
 
-const CONTINUE_BUTTON_NAME: StringName = &"ToContinue"
-const MENU_BUTTON_NAME: StringName = &"ToMenu"
-
 var _magic_label: Label = null
+
+#La única salida de la tienda, por NOMBRE ÚNICO (%). A diferencia de las filas de mejora
+#—que se buscan con find_child() porque la escena las trae de una copia y no las marcó—
+#este botón sí es un nombre único: sobrevive a que lo muevan de contenedor, que es lo que
+#más probablemente pase cuando alguien rediseñe la pantalla.
+#get_node_or_null y no %ToRetry directo: con % a secas, un nodo faltante rompe la escena
+#entera al instanciarla y la tienda no abriría nunca.
+@onready var _retry_button: Button = get_node_or_null("%ToRetry") as Button
 
 #Por mejora: el botón que se aprieta y el label donde se escribe nombre, costo y nivel.
 #Solo entran las mejoras cuyo botón existe de verdad en la escena.
 var _buttons: Dictionary[PlayerProgress.Upgrade, Button] = {}
 var _labels: Dictionary[PlayerProgress.Upgrade, Label] = {}
 
-#Si la escena no trae botones de salida, se sale por teclado. Ver _unhandled_input().
-var _has_exit_buttons: bool = false
+#Si el botón de reintentar no aparece, ENTER queda como salida de emergencia para que el
+#jugador no quede encerrado en la tienda. Ver _unhandled_input().
+var _has_retry_button: bool = false
 
 
 func _ready() -> void:
@@ -54,7 +60,7 @@ func _ready() -> void:
 		push_warning("ShopScreen: no encontré ningún Label llamado 'Puntaje' ni 'MagicLabel'. La magia no se va a mostrar.")
 
 	_collect_upgrade_rows()
-	_connect_exit_buttons()
+	_connect_retry_button()
 
 	#Comprar cambia la magia, y con ella lo que se puede pagar: las filas se redibujan
 	#solas ante cualquier cambio, venga de donde venga.
@@ -94,43 +100,35 @@ func _collect_upgrade_rows() -> void:
 		button.pressed.connect(_on_buy_pressed.bind(upgrade))
 
 
-#Los botones de salida son opcionales solo porque hoy mejoras.tscn no los tiene. Si
-#existen mandan ellos; si no, queda el teclado para que el jugador no quede encerrado.
-func _connect_exit_buttons() -> void:
-	var continue_button: Button = find_child(String(CONTINUE_BUTTON_NAME), true, false) as Button
-	var menu_button: Button = find_child(String(MENU_BUTTON_NAME), true, false) as Button
+#Reintentar es la ÚNICA salida con botón: arranca la ronda siguiente con lo comprado.
+func _connect_retry_button() -> void:
+	_has_retry_button = _retry_button != null
 
-	if continue_button != null:
-		continue_button.pressed.connect(func() -> void: continue_pressed.emit())
-
-	if menu_button != null:
-		menu_button.pressed.connect(func() -> void: menu_pressed.emit())
-
-	_has_exit_buttons = continue_button != null
-
-	if not _has_exit_buttons:
-		push_warning("ShopScreen: mejoras.tscn no tiene un botón '%s'. Se sale con ENTER (seguir) o ESC (menú)." % CONTINUE_BUTTON_NAME)
-
-
-#Salida de emergencia mientras la escena no tenga botones propios. Corre con el árbol
-#pausado porque el CanvasLayer "GUI" está en process_mode ALWAYS.
-#PROVISIONAL: se borra el día que mejoras.tscn tenga ToContinue y ToMenu.
-func _unhandled_input(event: InputEvent) -> void:
-	if _has_exit_buttons:
+	if not _has_retry_button:
+		push_error("ShopScreen: mejoras.tscn no tiene ningún nodo con el nombre único 'ToRetry'. Marcá el botón con 'Access as Unique Name' y llamalo así. Mientras tanto se sale con ENTER.")
 		return
 
+	_retry_button.pressed.connect(func() -> void: continue_pressed.emit())
+
+
+#ESC vuelve al título. No hay botón para eso: la pantalla tiene una sola salida visible,
+#así que esta es la única forma de abandonar la partida sin cerrar el juego.
+#ENTER solo actúa si el botón de reintentar no apareció, para no dejar al jugador
+#encerrado por un nodo mal nombrado.
+#Corre con el árbol pausado porque el CanvasLayer "GUI" está en process_mode ALWAYS.
+func _unhandled_input(event: InputEvent) -> void:
 	#set_input_as_handled() va SIEMPRE antes del emit(), nunca después. Emitir una señal
 	#es una llamada común y síncrona: del otro lado Main cierra esta pantalla con
 	#remove_child(), que la saca del árbol en el acto. Al volver de emit() este nodo ya
 	#no tiene viewport, y get_viewport() devuelve null.
-	if event.is_action_pressed(&"ui_accept"):
-		get_viewport().set_input_as_handled()
-		continue_pressed.emit()
-		return
-
 	if event.is_action_pressed(&"ui_cancel"):
 		get_viewport().set_input_as_handled()
 		menu_pressed.emit()
+		return
+
+	if not _has_retry_button and event.is_action_pressed(&"ui_accept"):
+		get_viewport().set_input_as_handled()
+		continue_pressed.emit()
 
 
 func _on_buy_pressed(upgrade: PlayerProgress.Upgrade) -> void:

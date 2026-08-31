@@ -22,6 +22,46 @@ texture_margin_top = 10.0
 texture_margin_right = 10.0
 texture_margin_bottom = 10.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4pvp3"]
+bg_color = Color(0.54901963, 0.4, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.34901962, 0.21960784, 0.7490196, 1)
+corner_radius_top_left = 44
+corner_radius_top_right = 44
+corner_radius_bottom_right = 44
+corner_radius_bottom_left = 44
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i8v46"]
+bg_color = Color(0.8509804, 0.6509804, 0.2509804, 1)
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_duskp"]
+bg_color = Color(0.8509804, 0.6509804, 0.2509804, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pxd0e"]
+bg_color = Color(0.34901962, 0.21960784, 0.7490196, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7cq6g"]
+
 [node name="Mejoras" type="Control" unique_id=1648058307]
 layout_mode = 3
 anchors_preset = 15
@@ -247,3 +287,46 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_i8v46")
 stretch_mode = 5
+
+[node name="Actions" type="VBoxContainer" parent="." unique_id=1082826403]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 459.0
+offset_top = 230.0
+offset_right = 959.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="ButtonsMargin" type="MarginContainer" parent="Actions" unique_id=289553509]
+layout_mode = 2
+theme_override_constants/margin_left = 66
+theme_override_constants/margin_top = 66
+
+[node name="ToRetry" type="Button" parent="Actions" unique_id=268716063]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 100)
+custom_maximum_size = Vector2(300, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_pressed_color = Color(0.54901963, 0.4, 1, 1)
+theme_override_colors/font_hover_color = Color(0.54901963, 0.4, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.54901963, 0.4, 1, 1)
+theme_override_colors/icon_pressed_color = Color(0.72156864, 0.5294118, 0.18039216, 1)
+theme_override_colors/icon_hover_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.8784314, 0.6745098, 0.2901961, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_4pvp3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_i8v46")
+theme_override_styles/hover_mirrored = SubResource("StyleBoxFlat_duskp")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_pxd0e")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7cq6g")
+text = "Reintentar"
+icon_alignment = 1
+expand_icon = true
