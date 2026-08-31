@@ -119,7 +119,7 @@ layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.9490196, 0.92156863, 1, 1)
 theme_override_font_sizes/font_size = 64
-text = "CONTROLES"
+text = "CONTROLS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
