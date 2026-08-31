@@ -33,6 +33,7 @@ const PROJECTILE_SCENE: PackedScene = preload("res://game/actors/projectile/proj
 var _cooldown_left: float = 0.0
 
 @onready var player: Player = get_parent()
+@onready var sprite: AnimatedSprite2D = get_parent().get_node("AnimatedSprite2D")
 @onready var wand_sprite: Sprite2D = $WandSprite
 @onready var muzzle: Marker2D = $Muzzle
 @onready var wandSfx: AudioStreamPlayer2D = $"../WandSfx"
@@ -104,7 +105,11 @@ func _cast() -> void:
 
 	projectile.launch(get_muzzle_position(), aim_direction, spell)
 	wandSfx.play()
-
+	
+	var anim_tween = get_tree().create_tween()
+	anim_tween.tween_property(sprite, "scale", Vector2(0.9, 1.1), 0.1).set_trans(Tween.TRANS_QUAD)
+	anim_tween.tween_property(sprite, "scale", Vector2(1.05, 0.95), 0.1).set_trans(Tween.TRANS_QUAD)
+	anim_tween.tween_property(sprite, "scale", Vector2(1, 1), 0.1).set_trans(Tween.TRANS_QUAD)
 
 # de donde sale el hechizo
 func get_muzzle_position() -> Vector2:

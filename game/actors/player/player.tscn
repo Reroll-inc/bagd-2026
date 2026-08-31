@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://dkw2wps2wylkl"]
 
 [ext_resource type="Script" uid="uid://b62upqybubksd" path="res://game/actors/player/player.gd" id="1_l17oj"]
-[ext_resource type="Texture2D" uid="uid://bmo7jf1bgk67" path="res://assets/icon.svg" id="1_xjuxa"]
 [ext_resource type="Script" uid="uid://bdk53el3x7nfb" path="res://game/actors/player/wand_aimer.gd" id="3_em52k"]
+[ext_resource type="Texture2D" uid="uid://bxt304iky6var" path="res://assets/wand.png" id="4_hlqpx"]
 [ext_resource type="Resource" uid="uid://dkhi11aegp4tl" path="res://game/actors/tool/animate_broom.tres" id="4_p81wk"]
 [ext_resource type="SpriteFrames" uid="uid://dv7bewa7ajlcy" path="res://game/actors/player/player_frames.tres" id="5_m3o3f"]
 [ext_resource type="AudioStream" uid="uid://p272c70ida0j" path="res://assets/sounds/wood-step.ogg" id="6_pqla1"]
 [ext_resource type="AudioStream" uid="uid://brdnj020rrbtm" path="res://assets/sounds/wand.ogg" id="7_j5vpa"]
+[ext_resource type="Script" uid="uid://cv21jrcegn4cy" path="res://game/actors/player/cooldown_indicator.gd" id="8_hlqpx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(485.1076, 1296.4473)
@@ -42,9 +43,9 @@ position = Vector2(90, 0)
 
 [node name="WandSprite" type="Sprite2D" parent="WandPivot" unique_id=511579129]
 modulate = Color(1, 0, 0.05882353, 1)
-position = Vector2(74.99998, 0.9999998)
-scale = Vector2(0.21687773, 0.012156597)
-texture = ExtResource("1_xjuxa")
+position = Vector2(65, 1)
+scale = Vector2(-1, -1)
+texture = ExtResource("4_hlqpx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1037431165]
 sprite_frames = ExtResource("5_m3o3f")
@@ -64,7 +65,7 @@ drag_bottom_margin = 0.65
 
 [node name="WoodStep" type="AudioStreamPlayer2D" parent="." unique_id=691574167]
 stream = SubResource("AudioStreamRandomizer_0enqp")
-volume_db = -14.065
+volume_db = 4.613
 max_polyphony = 10
 
 [node name="StepSfxTimer" type="Timer" parent="." unique_id=814134519]
@@ -73,4 +74,7 @@ one_shot = true
 
 [node name="WandSfx" type="AudioStreamPlayer2D" parent="." unique_id=1933418449]
 stream = SubResource("AudioStreamRandomizer_pqla1")
-volume_db = -11.334
+
+[node name="CooldownIndicator" type="Node2D" parent="." unique_id=1385482973]
+position = Vector2(0, -160)
+script = ExtResource("8_hlqpx")

@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://d2c7phh4ja58i" path="res://assets/placeholder/dust.png" id="3_lvidr"]
 [ext_resource type="AudioStream" uid="uid://b8evpno3mk8gd" path="res://assets/sounds/clean.ogg" id="4_ydw1x"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
-size = Vector2(41, 34.5)
+[sub_resource type="CircleShape2D" id="CircleShape2D_1cjql"]
+radius = 19.041075
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_uweo1"]
 random_pitch = 1.1148374
@@ -21,12 +21,13 @@ script = ExtResource("1_5x3ro")
 data = ExtResource("2_lvidr")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1655475435]
+scale = Vector2(0.7, 0.7)
 texture = ExtResource("3_lvidr")
 hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=84803624]
 position = Vector2(1, -0.25)
-shape = SubResource("RectangleShape2D_g4v7s")
+shape = SubResource("CircleShape2D_1cjql")
 
 [node name="CleanSfx" type="AudioStreamPlayer2D" parent="." unique_id=1437480895]
 stream = SubResource("AudioStreamRandomizer_uweo1")

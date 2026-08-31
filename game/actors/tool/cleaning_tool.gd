@@ -94,6 +94,7 @@ var _body_box: Rect2 = Rect2()
 @onready var wakeUpSfx : AudioStreamPlayer2D = $WakeUpSfx
 @onready var cleanSfx : AudioStreamPlayer2D = $CleanSfx
 @onready var walkSfx : AudioStreamPlayer2D = $WalkSfx
+@onready var walkTimer : Timer = $WalkTimer
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -275,8 +276,12 @@ func _find_nearest_dirt() -> Dirt:
 
 func _navigate_dumb() -> void:
 	var distance: float = _target_x - global_position.x
-	if not walkSfx.playing:
-			walkSfx.play()
+	#if not walkSfx.playing:
+		#walkSfx.play()
+
+	var offset = 10.0*sin(Time.get_ticks_msec() * 0.01)
+	sprite.position.y = offset
+	
 	if absf(distance) <= ARRIVAL_THRESHOLD:
 		_stop_here()
 		return
@@ -292,7 +297,6 @@ func _navigate_dumb() -> void:
 
 	velocity.x = direction * data.move_speed
 	sprite.flip_h = velocity.x < 0.0
-
 
 
 #La sonda se reubica adelante en la dirección de marcha y se fuerza a medir AHORA:
@@ -322,7 +326,7 @@ func _stop_here() -> void:
 #La búsqueda corre solo en dos momentos: al frenar y al terminar un parche.
 func _start_cleaning_or_idle() -> void:
 	_target_dirt = _find_dirt_in_range()
-
+	
 	if _target_dirt == null:
 		#Frenó sin nada de su tipo al alcance. Para una escoba autónoma eso significa que
 		#el parche que se propuso no era alcanzable —casi siempre porque el freno de borde
@@ -357,7 +361,10 @@ func _do_cleaning(delta: float) -> void:
 	cleanSfx.play()
 	_clean_timer = 0.0
 	_target_dirt.clean(data.cleaning_power)
-	
+	var tween = get_tree().create_tween()
+	tween.tween_property(sprite, "rotation", 0.3, 0.2)
+	tween.tween_property(sprite, "rotation", -0.3, 0.2)
+	tween.tween_property(sprite, "rotation", 0, 0.1)
 
 
 #Busca el parche más cercano DE SU TIPO dentro del alcance. Un objeto limpia una sola
@@ -430,7 +437,9 @@ func _select_exclusively() -> void:
 		if other != null:
 			other.set_selected(other == self)
 
-
+	var tween = get_tree().create_tween()
+	tween.tween_property(sprite, "scale", Vector2(0.9, 1.2), 0.2).set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(sprite, "scale", Vector2(1, 1), 0.1).set_trans(Tween.TRANS_QUAD)
 
 #Todas las transiciones pasan por acá, igual que en player.gd. Es el único lugar donde
 #poner un breakpoint si algún objeto queda trabado en un estado.

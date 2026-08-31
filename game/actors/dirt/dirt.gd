@@ -58,6 +58,9 @@ func _ready() -> void:
 ##hechizo, que limpia igual que la escoba pero rinde menos magia. Por defecto 1.0, así
 ##que quien limpie normalmente ni se entera de que el parámetro existe.
 func clean(power: int, magic_scale: float = 1.0) -> int:
+	var tween = get_tree().create_tween()
+	tween.tween_property(sprite, "scale", Vector2(0.95, 0.95), 0.2).set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(sprite, "scale", Vector2(0.8, 0.8), 0.1).set_trans(Tween.TRANS_QUAD)
 	if _passes_left <= 0:
 		return 0
 
