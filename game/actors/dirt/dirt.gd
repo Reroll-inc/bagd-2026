@@ -24,6 +24,8 @@ const GROUP: StringName = &"dirt"
 var _passes_left: int = 0
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var cleanSfx : AudioStreamPlayer2D = $CleanSfx
+var dead = false
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -69,13 +71,13 @@ func clean(power: int, magic_scale: float = 1.0) -> int:
 	var magic: int = maxi(roundi(float(passes_removed * data.magic_per_pass) * magic_scale), 1)
 	cleaned.emit(magic)
 
-	_refresh_visual()
-
+	# _refresh_visual()
+	
 	if _passes_left <=0:
+		cleanSfx.play()
 		depleted.emit()
-
-
-		queue_free()
+		sprite.visible = false
+		dead = true
 	
 	return magic
 

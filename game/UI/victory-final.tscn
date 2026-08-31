@@ -9,25 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://hgll5m577xfj" path="res://game/UI/Assets/forward.png" id="4_h20y7"]
 [ext_resource type="Texture2D" uid="uid://3671xalivc45" path="res://game/UI/Assets/locked.png" id="5_2kffb"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ciqd4"]
-bg_color = Color(0.21960784, 0.18039216, 0.29803923, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.5019608, 0.4, 0.6509804, 1)
-corner_radius_top_left = 60
-corner_radius_top_right = 60
-corner_radius_bottom_right = 60
-corner_radius_bottom_left = 60
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2kffb"]
-bg_color = Color(0.6509804, 0.5019608, 1, 1)
-corner_radius_top_left = 60
-corner_radius_top_right = 60
-corner_radius_bottom_right = 60
-corner_radius_bottom_left = 60
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n2onv"]
 bg_color = Color(0.81960785, 0.61960787, 0.21960784, 1)
 border_width_left = 4
@@ -297,19 +278,6 @@ text = "Ni una partícula de polvo quedó
 "
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="ButtonBack" type="Button" parent="." unique_id=1628776968]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 80.0
-offset_top = 890.0
-offset_right = 149.0
-offset_bottom = 959.0
-theme_override_font_sizes/font_size = 48
-theme_override_styles/normal = SubResource("StyleBoxFlat_ciqd4")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2kffb")
-text = "←"
-icon_alignment = 1
 
 [node name="Piso1" type="Control" parent="." unique_id=1230506204]
 visible = false

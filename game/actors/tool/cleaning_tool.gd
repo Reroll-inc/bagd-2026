@@ -92,6 +92,8 @@ var _body_box: Rect2 = Rect2()
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var _collider: CollisionShape2D = $CollisionShape2D
 @onready var wakeUpSfx : AudioStreamPlayer2D = $WakeUpSfx
+@onready var cleanSfx : AudioStreamPlayer2D = $CleanSfx
+@onready var walkSfx : AudioStreamPlayer2D = $WalkSfx
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -266,7 +268,8 @@ func _find_nearest_dirt() -> Dirt:
 
 func _navigate_dumb() -> void:
 	var distance: float = _target_x - global_position.x
-
+	if not walkSfx.playing:
+			walkSfx.play()
 	if absf(distance) <= ARRIVAL_THRESHOLD:
 		_stop_here()
 		return
@@ -332,10 +335,10 @@ func _start_cleaning_or_idle() -> void:
 
 
 func _do_cleaning(delta: float) -> void:
-	#El parche puede haber desaparecido en el golpe anterior. queue_free() no pone la
+	#El parche puede haber desaparecido en el golpe ante	rior. queue_free() no pone la
 	#variable en null: sigue apuntando a un objeto liberado, y tocarlo revienta.
 	#is_instance_valid() es la única forma honesta de preguntar "¿esto todavía existe?".
-	if not is_instance_valid(_target_dirt):
+	if not is_instance_valid(_target_dirt) or _target_dirt.dead:
 		_start_cleaning_or_idle()
 		return
 
@@ -344,6 +347,7 @@ func _do_cleaning(delta: float) -> void:
 	if _clean_timer < data.clean_interval:
 		return
 
+	cleanSfx.play()
 	_clean_timer = 0.0
 	_target_dirt.clean(data.cleaning_power)
 	
@@ -358,7 +362,7 @@ func _find_dirt_in_range() -> Dirt:
 	for node: Node in get_tree().get_nodes_in_group(Dirt.GROUP):
 		var dirt: Dirt = node as Dirt
 
-		if dirt == null or dirt.data == null:
+		if dirt.dead or dirt == null or dirt.data == null:
 			continue
 
 		if dirt.data.type != data.cleans:
