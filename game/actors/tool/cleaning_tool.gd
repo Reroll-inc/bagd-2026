@@ -56,6 +56,12 @@ enum State {ASLEEP, IDLE, MOVING, CLEANING}
 ##Lo pone el BroomSpawner al instanciarla; en el editor va siempre en false.
 @export var autonomous: bool = false
 
+##Cuánto de move_speed usa la escoba automática. Solo aplica si autonomous está en true,
+##así que tocarlo no afecta a las escobas que dirige el jugador.
+##Es la perilla para balancearla: si limpia el nivel sola demasiado rápido, bajá esto
+##antes que subirle el precio.
+@export_range(0.1, 1.0, 0.05) var autonomous_speed_scale: float = 0.6
+
 # No sale de ToolData porque no es una propiedad de la escoba: es del mundo. Si algún
 # día hay un nivel con gravedad rara, se cambia acá y no en cada .tres.
 @export var gravity: float = 980.0
@@ -94,7 +100,6 @@ var _body_box: Rect2 = Rect2()
 @onready var wakeUpSfx : AudioStreamPlayer2D = $WakeUpSfx
 @onready var cleanSfx : AudioStreamPlayer2D = $CleanSfx
 @onready var walkSfx : AudioStreamPlayer2D = $WalkSfx
-@onready var walkTimer : Timer = $WalkTimer
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -295,7 +300,9 @@ func _navigate_dumb() -> void:
 		_stop_here()
 		return
 
-	velocity.x = direction * data.move_speed
+	#La automática camina más despacio que una que vos dirigís: es el precio de no tener
+	#que ordenarle nada. Sin esto, comprarla sería estrictamente mejor que jugar.
+	velocity.x = direction * data.move_speed * (autonomous_speed_scale if autonomous else 1.0)
 	sprite.flip_h = velocity.x < 0.0
 
 

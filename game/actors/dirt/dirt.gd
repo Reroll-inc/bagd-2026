@@ -54,10 +54,10 @@ func _ready() -> void:
 ##Recibe un golpe de limpieza y devuelve la magia otorgada.
 ##La llama la herramienta que está limpiando. `power` es ToolData.cleaning_power.
 ##
-##`magic_scale` descuenta la magia de ESE golpe sin tocar los pases que saca. Lo usa el
-##hechizo, que limpia igual que la escoba pero rinde menos magia. Por defecto 1.0, así
-##que quien limpie normalmente ni se entera de que el parámetro existe.
-func clean(power: int, magic_scale: float = 1.0) -> int:
+##`magic_override` reemplaza la magia de ESE golpe sin tocar los pases que saca. Lo usa el
+##hechizo, que limpia igual que la escoba pero paga un fijo mucho menor. En -1 (el default)
+##se cobra lo normal, así que quien limpie con una herramienta ni se entera de que existe.
+func clean(power: int, magic_override: int = -1) -> int:
 	var tween = get_tree().create_tween()
 	tween.tween_property(sprite, "scale", Vector2(0.95, 0.95), 0.2).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(sprite, "scale", Vector2(0.8, 0.8), 0.1).set_trans(Tween.TRANS_QUAD)
@@ -74,10 +74,14 @@ func clean(power: int, magic_scale: float = 1.0) -> int:
 	var passes_removed: int = mini(power, _passes_left)
 	_passes_left -= passes_removed
 
-	#maxi(..., 1): un golpe que efectivamente sacó pases nunca paga 0. Con magic_scale
-	#bajo y magic_per_pass chico el redondeo daría 0, y limpiar sin cobrar nada se lee
-	#como que el golpe no contó.
-	var magic: int = maxi(roundi(float(passes_removed * data.magic_per_pass) * magic_scale), 1)
+	#Lo normal es cobrar por pase; el override es un valor plano que manda si viene.
+	#Se compara contra 0 y no contra null porque -1 ya significa "no hay override": así
+	#un hechizo puede pagar 0 a propósito si algún día se quiere que no rinda nada.
+	var magic: int = passes_removed * data.magic_per_pass
+
+	if magic_override >= 0:
+		magic = magic_override
+
 	cleaned.emit(magic)
 
 	# _refresh_visual()
