@@ -29,7 +29,8 @@ extends Resource
 #mugre. Se apaga poniendo cleaning_power en 0: el hechizo vuelve a solo animar.
 @export_range(0, 20) var cleaning_power: int = 1
 
-#Es un factor sobre la magia normal del parche, no
-#un número aparte: así balancear magic_per_pass sigue moviendo las dos vías a la vez.
-#0.5 = el hechizo rinde la mitad que la escoba por cada pase que saca.
-@export_range(0.0, 1.0, 0.05) var magic_scale: float = 0.5
+#Magia FIJA que da un impacto del hechizo, sin importar cuántos pases saque ni cuánto
+#valga el parche. Antes era un factor sobre la magia normal y daba 3; ahora es un número
+#plano para que limpiar a hechizos rinda claramente menos que delegar en una escoba.
+#La escoba, en cambio, sigue cobrando passes_removed * DirtData.magic_per_pass.
+@export_range(0, 50) var magic_per_hit: int = 1
