@@ -15,7 +15,12 @@ signal menu_pressed
 
 @onready var _play_again_button: Button = %ToPlayAgain
 @onready var _menu_button: Button = %ToMenu
-@onready var _magic_label: Label = %MagicLabel
+
+#OPCIONAL a propósito. victory-final.tscn, que es la pantalla de victoria desde el
+#rediseño, no tiene MagicLabel: es un mapa de pisos, no un cartel de puntaje. Con % a
+#secas el nodo faltante rompe la escena entera al instanciarla; con get_node_or_null()
+#la pantalla abre igual y lo único que se pierde es el número.
+@onready var _magic_label: Label = get_node_or_null("%MagicLabel") as Label
 
 
 func _ready() -> void:
@@ -25,7 +30,11 @@ func _ready() -> void:
 
 ##Cuánta magia juntó el jugador. La llama Main al abrir la pantalla: igual que el HUD,
 ##esta escena no sale a buscar el RunState, se lo pasan ya masticado.
+##Sin MagicLabel en la escena no hace nada, en vez de reventar.
 func show_magic(magic: int) -> void:
+	if _magic_label == null:
+		return
+
 	_magic_label.text = "%d de magia" % magic
 
 

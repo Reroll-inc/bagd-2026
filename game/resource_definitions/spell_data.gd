@@ -21,3 +21,16 @@ extends Resource
 @export_range(0, 100) var energy_cost: int = 0
 
 @export var texture: Texture2D
+
+
+@export_group("Limpieza directa")
+
+#para que el jugador tenga una segunda vía de limpiar ahora que se gana eliminando TODA la
+#mugre. Se apaga poniendo cleaning_power en 0: el hechizo vuelve a solo animar.
+@export_range(0, 20) var cleaning_power: int = 1
+
+#Magia FIJA que da un impacto del hechizo, sin importar cuántos pases saque ni cuánto
+#valga el parche. Antes era un factor sobre la magia normal y daba 3; ahora es un número
+#plano para que limpiar a hechizos rinda claramente menos que delegar en una escoba.
+#La escoba, en cambio, sigue cobrando passes_removed * DirtData.magic_per_pass.
+@export_range(0, 50) var magic_per_hit: int = 1

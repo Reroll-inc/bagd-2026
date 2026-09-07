@@ -42,9 +42,25 @@ const WORLD_LAYER_MASK: int = 1
 #Orientation.WALL o CEILING, ese caso necesita su propio criterio de alcance.
 const CLEAN_RANGE: float = 60.0
 
+#Cada cuánto busca trabajo una escoba autónoma que está sin nada que hacer. No es por
+#frame porque cada búsqueda recorre TODO el grupo "dirt": a 60 fps eso serían 60 barridos
+#por segundo para un resultado que casi nunca cambia entre frame y frame.
+const AUTO_SEARCH_INTERVAL: float = 0.5
+
 enum State {ASLEEP, IDLE, MOVING, CLEANING}
 
 @export var data: ToolData
+
+##La escoba automática de la tienda. No se hechiza, no se selecciona y no acepta órdenes:
+##nace despierta y se busca el trabajo sola.
+##Lo pone el BroomSpawner al instanciarla; en el editor va siempre en false.
+@export var autonomous: bool = false
+
+##Cuánto de move_speed usa la escoba automática. Solo aplica si autonomous está en true,
+##así que tocarlo no afecta a las escobas que dirige el jugador.
+##Es la perilla para balancearla: si limpia el nivel sola demasiado rápido, bajá esto
+##antes que subirle el precio.
+@export_range(0.1, 1.0, 0.05) var autonomous_speed_scale: float = 0.6
 
 # No sale de ToolData porque no es una propiedad de la escoba: es del mundo. Si algún
 # día hay un nivel con gravedad rara, se cambia acá y no en cada .tres.
@@ -60,6 +76,19 @@ var _clean_timer: float = 0.0
 
 var _target_dirt: Dirt = null
 
+#Segundos desde la última búsqueda de trabajo. Solo lo usa una escoba autónoma.
+var _auto_search_timer: float = 0.0
+
+#Hacia qué parche está caminando una escoba autónoma. No es lo mismo que _target_dirt:
+#ese es el que está limpiando AHORA, este es el que se propuso alcanzar.
+var _auto_target: Dirt = null
+
+#Parches a los que esta escoba caminó y no pudo alcanzar — típicamente porque el freno
+#de borde la paró en un precipicio. Sin esta lista se quedaría eligiendo eternamente el
+#mismo parche inalcanzable, que además suele ser el más cercano.
+#Se vacía cuando logra limpiar algo: si el mundo cambió, los descartes pueden no valer.
+var _unreachable: Array[Dirt] = []
+
 var _ledge_probe: RayCast2D
 
 #Caja del cuerpo en coordenadas locales, medida una sola vez. De acá salen los pies y
@@ -68,7 +97,9 @@ var _body_box: Rect2 = Rect2()
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var _collider: CollisionShape2D = $CollisionShape2D
-
+@onready var wakeUpSfx : AudioStreamPlayer2D = $WakeUpSfx
+@onready var cleanSfx : AudioStreamPlayer2D = $CleanSfx
+@onready var walkSfx : AudioStreamPlayer2D = $WalkSfx
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -86,10 +117,21 @@ func _ready() -> void:
 
 	_refresh_visual()
 
+	#Una escoba autónoma no espera ningún hechizo: se compró ya animada. Va después del
+	#_refresh_visual() de arriba para que el cambio de estado repinte el tinte de dormida.
+	if autonomous:
+		_change_state(State.IDLE)
+
 
 func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
-	_read_order()
+
+	#Las dos formas de recibir trabajo se excluyen: la autónoma se lo busca sola y no
+	#acepta órdenes, la normal solo hace lo que le mandan.
+	if autonomous:
+		_tick_autonomy(delta)
+	else:
+		_read_order()
 
 	match _state:
 		State.MOVING:
@@ -113,11 +155,18 @@ func try_animate(spell: SpellData) -> bool:
 	if spell.animates != data.cleans:
 		return false
 
+	#La escoba automática ignora el hechizo: ya nació animada y no obedece órdenes, así
+	#que seleccionarla dejaría al jugador dando clicks derechos que no hacen nada.
+	#El proyectil se gasta igual al chocarla, como con cualquier cuerpo.
+	if autonomous:
+		return false
+
 	var was_asleep: bool = _state == State.ASLEEP
 
 	if was_asleep:
 		_change_state(State.IDLE)
 		animated.emit()
+		wakeUpSfx.play()
 
 	_select_exclusively()
 
@@ -162,11 +211,82 @@ func _read_order() -> void:
 	_change_state(State.MOVING)
 
 
+# ═══════════════ AUTONOMÍA ═══════════════
+
+
+#Le busca trabajo a una escoba autónoma. Solo actúa cuando está en IDLE: interrumpir una
+#limpieza a mitad porque apareció un parche más cerca haría que no termine ninguno, y
+#recalcular el destino mientras camina la haría dudar en cada frame.
+func _tick_autonomy(delta: float) -> void:
+	if _state != State.IDLE:
+		return
+
+	_auto_search_timer += delta
+
+	if _auto_search_timer < AUTO_SEARCH_INTERVAL:
+		return
+
+	_auto_search_timer = 0.0
+
+	var target: Dirt = _find_nearest_dirt()
+
+	#Sin trabajo se queda quieta y vuelve a preguntar dentro de medio segundo. No es un
+	#error: puede ser que ya no quede mugre de su tipo, o que toda la que queda esté en
+	#la lista de inalcanzables.
+	if target == null:
+		return
+
+	_auto_target = target
+	_target_x = target.global_position.x
+	_change_state(State.MOVING)
+
+
+#El parche más cercano de su tipo en TODO el nivel, sin el límite de CLEAN_RANGE: ese
+#límite responde "¿lo tengo al lado?", y acá la pregunta es "¿hacia dónde camino?".
+func _find_nearest_dirt() -> Dirt:
+	var closest: Dirt = null
+	var closest_distance: float = INF
+
+	for node: Node in get_tree().get_nodes_in_group(Dirt.GROUP):
+		var dirt: Dirt = node as Dirt
+
+		if dirt == null or dirt.data == null:
+			continue
+
+		#Un parche agotado ya no se borra del árbol: se apaga con 'dead' y sigue en el
+		#grupo. Sin este filtro la escoba autónoma caminaría hasta parches ya limpios,
+		#descubriría al llegar que no hay nada que hacer y perdería reloj una vez por
+		#cada uno. Mismo criterio que _find_dirt_in_range().
+		if dirt.dead:
+			continue
+
+		if dirt.data.type != data.cleans:
+			continue
+
+		if _unreachable.has(dirt):
+			continue
+
+		#Solo la separación horizontal, igual que _find_dirt_in_range(): esta escoba
+		#camina en X y la distancia vertical entre orígenes no es distancia de viaje.
+		var distance: float = absf(dirt.global_position.x - global_position.x)
+
+		if distance < closest_distance:
+			closest = dirt
+			closest_distance = distance
+
+	return closest
+
+
 
 
 func _navigate_dumb() -> void:
 	var distance: float = _target_x - global_position.x
+	#if not walkSfx.playing:
+		#walkSfx.play()
 
+	var offset = 10.0*sin(Time.get_ticks_msec() * 0.01)
+	sprite.position.y = offset
+	
 	if absf(distance) <= ARRIVAL_THRESHOLD:
 		_stop_here()
 		return
@@ -180,9 +300,10 @@ func _navigate_dumb() -> void:
 		_stop_here()
 		return
 
-	velocity.x = direction * data.move_speed
+	#La automática camina más despacio que una que vos dirigís: es el precio de no tener
+	#que ordenarle nada. Sin esto, comprarla sería estrictamente mejor que jugar.
+	velocity.x = direction * data.move_speed * (autonomous_speed_scale if autonomous else 1.0)
 	sprite.flip_h = velocity.x < 0.0
-
 
 
 #La sonda se reubica adelante en la dirección de marcha y se fuerza a medir AHORA:
@@ -212,8 +333,18 @@ func _stop_here() -> void:
 #La búsqueda corre solo en dos momentos: al frenar y al terminar un parche.
 func _start_cleaning_or_idle() -> void:
 	_target_dirt = _find_dirt_in_range()
-
+	
 	if _target_dirt == null:
+		#Frenó sin nada de su tipo al alcance. Para una escoba autónoma eso significa que
+		#el parche que se propuso no era alcanzable —casi siempre porque el freno de borde
+		#la paró en un precipicio— y hay que anotarlo: si no, volvería a elegir el mismo,
+		#que además suele ser el más cercano, y quedaría yendo y viniendo para siempre.
+		#La lista NO se vacía nunca a propósito: el terreno de un nivel no cambia durante
+		#la run, así que lo que no se pudo alcanzar una vez no se va a poder después.
+		if autonomous and _auto_target != null and not _unreachable.has(_auto_target):
+			_unreachable.append(_auto_target)
+
+		_auto_target = null
 		_change_state(State.IDLE)
 		return
 
@@ -222,10 +353,10 @@ func _start_cleaning_or_idle() -> void:
 
 
 func _do_cleaning(delta: float) -> void:
-	#El parche puede haber desaparecido en el golpe anterior. queue_free() no pone la
+	#El parche puede haber desaparecido en el golpe ante	rior. queue_free() no pone la
 	#variable en null: sigue apuntando a un objeto liberado, y tocarlo revienta.
 	#is_instance_valid() es la única forma honesta de preguntar "¿esto todavía existe?".
-	if not is_instance_valid(_target_dirt):
+	if not is_instance_valid(_target_dirt) or _target_dirt.dead:
 		_start_cleaning_or_idle()
 		return
 
@@ -234,8 +365,13 @@ func _do_cleaning(delta: float) -> void:
 	if _clean_timer < data.clean_interval:
 		return
 
+	cleanSfx.play()
 	_clean_timer = 0.0
 	_target_dirt.clean(data.cleaning_power)
+	var tween = get_tree().create_tween()
+	tween.tween_property(sprite, "rotation", 0.3, 0.2)
+	tween.tween_property(sprite, "rotation", -0.3, 0.2)
+	tween.tween_property(sprite, "rotation", 0, 0.1)
 
 
 #Busca el parche más cercano DE SU TIPO dentro del alcance. Un objeto limpia una sola
@@ -247,7 +383,10 @@ func _find_dirt_in_range() -> Dirt:
 	for node: Node in get_tree().get_nodes_in_group(Dirt.GROUP):
 		var dirt: Dirt = node as Dirt
 
-		if dirt == null or dirt.data == null:
+		#El null va PRIMERO: 'or' evalúa de izquierda a derecha y corta apenas algo da
+		#true, así que preguntar por dirt.dead antes de saber si dirt existe revienta
+		#el día que alguien meta en el grupo "dirt" un nodo que no es un Dirt.
+		if dirt == null or dirt.data == null or dirt.dead:
 			continue
 
 		if dirt.data.type != data.cleans:
@@ -305,7 +444,9 @@ func _select_exclusively() -> void:
 		if other != null:
 			other.set_selected(other == self)
 
-
+	var tween = get_tree().create_tween()
+	tween.tween_property(sprite, "scale", Vector2(0.9, 1.2), 0.2).set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(sprite, "scale", Vector2(1, 1), 0.1).set_trans(Tween.TRANS_QUAD)
 
 #Todas las transiciones pasan por acá, igual que en player.gd. Es el único lugar donde
 #poner un breakpoint si algún objeto queda trabado en un estado.

@@ -24,6 +24,14 @@ const GROUP: StringName = &"dirt"
 var _passes_left: int = 0
 
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var cleanSfx : AudioStreamPlayer2D = $CleanSfx
+
+#Se apaga cuando el parche se agota. Desde que el nodo ya no se destruye, esta bandera
+#es lo ÚNICO que distingue un parche vivo de uno limpio: quien recorra el grupo "dirt"
+#tiene que consultarla.
+var dead = false
+
+@onready var _collider: CollisionShape2D = $CollisionShape2D
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -45,8 +53,20 @@ func _ready() -> void:
 
 ##Recibe un golpe de limpieza y devuelve la magia otorgada.
 ##La llama la herramienta que está limpiando. `power` es ToolData.cleaning_power.
-func clean(power: int) -> int:
+##
+##`magic_override` reemplaza la magia de ESE golpe sin tocar los pases que saca. Lo usa el
+##hechizo, que limpia igual que la escoba pero paga un fijo mucho menor. En -1 (el default)
+##se cobra lo normal, así que quien limpie con una herramienta ni se entera de que existe.
+func clean(power: int, magic_override: int = -1) -> int:
+	var tween = get_tree().create_tween()
+	tween.tween_property(sprite, "scale", Vector2(0.95, 0.95), 0.2).set_trans(Tween.TRANS_QUAD)
+	tween.tween_property(sprite, "scale", Vector2(0.8, 0.8), 0.1).set_trans(Tween.TRANS_QUAD)
 	if _passes_left <= 0:
+		return 0
+
+	#Sin esta guarda un power de 0 sacaría 0 pases y aun así cobraría el mínimo de 1
+	#de magia de abajo: magia gratis e infinita golpeando con fuerza cero.
+	if power <= 0:
 		return 0
 
 	#mini() evita cobrar de más: si quedaba 1 pase y la escoba pega con fuerza 3,
@@ -54,15 +74,32 @@ func clean(power: int) -> int:
 	var passes_removed: int = mini(power, _passes_left)
 	_passes_left -= passes_removed
 
+	#Lo normal es cobrar por pase; el override es un valor plano que manda si viene.
+	#Se compara contra 0 y no contra null porque -1 ya significa "no hay override": así
+	#un hechizo puede pagar 0 a propósito si algún día se quiere que no rinda nada.
 	var magic: int = passes_removed * data.magic_per_pass
+
+	if magic_override >= 0:
+		magic = magic_override
+
 	cleaned.emit(magic)
 
-	_refresh_visual()
-
-	if _passes_left <=0:
-		depleted.emit()
-		queue_free()
+	# _refresh_visual()
 	
+	if _passes_left <=0:
+		cleanSfx.play()
+		depleted.emit()
+		sprite.visible = false
+		dead = true
+
+		#Esconder el sprite no saca al parche del mundo físico: el Area2D sigue detectando.
+		#Sin esto el hechizo choca contra mugre invisible y se gasta, y un parche limpio
+		#entre la maga y una escoba bloquea todos los disparos.
+		#set_deferred y no asignación directa: esto corre dentro del procesamiento de
+		#física —lo llama el proyectil al impactar o la escoba en su _physics_process— y
+		#tocar 'disabled' en pleno flush de queries es un error de Godot, no una opción.
+		_collider.set_deferred(&"disabled", true)
+
 	return magic
 
 ##Cuántos golpes le quedan.

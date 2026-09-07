@@ -24,6 +24,10 @@ extends Node
 ##Pantalla de victoria. Misma forma que la de derrota, más la magia juntada.
 @export var victory_scene: PackedScene
 
+##Tienda de mejoras. Es lo que se muestra cuando se acaba el tiempo, en lugar de la
+##pantalla de derrota.
+@export var shop_scene: PackedScene
+
 @export var print_events: bool = true
 
 @onready var _level_container: Node2D = $LevelContainer
@@ -32,6 +36,7 @@ extends Node
 #Dónde viven las pantallas de UI (menú, controles, fin de partida). Está en el mismo
 #CanvasLayer que el HUD pero por debajo en el árbol, así se dibuja encima de él.
 @onready var _screen_container: Control = %ScreenContainer
+@onready var music : GlobalMusic = $Music
 
 #El nivel vivo. Null entre que se descarga uno y se instancia el siguiente.
 var _level: Node = null
@@ -61,6 +66,7 @@ func go_to_menu() -> void:
 	get_tree().paused = false
 	_run_finished = false
 
+	music.stop()
 	_unload_level()
 
 	#El HUD vive fuera del nivel para sobrevivir a los reinicios, así que hay que
@@ -76,6 +82,7 @@ func go_to_menu() -> void:
 
 	menu.play_pressed.connect(start_game)
 	menu.controls_pressed.connect(go_to_controls)
+
 
 	if print_events:
 		print("[Main] menú")
@@ -100,7 +107,10 @@ func start_game() -> void:
 	_close_screen()
 	_hud.visible = true
 	_load_level()
-
+	if not music.playing:
+		music.start_playing()
+	else:
+		music.fade_up()
 
 #Una sola pantalla viva a la vez. Devuelve la instancia para que quien la pidió le
 #conecte las señales: así el que decide qué hace cada botón es siempre Main.
@@ -133,7 +143,7 @@ func _load_level() -> void:
 	if level_scene == null:
 		push_error("Main sin level_scene asignado: no hay nada que cargar.")
 		return
-	
+
 	get_tree().paused = false
 	_run_finished = false
 	_hud.hide_end_message()
@@ -141,6 +151,12 @@ func _load_level() -> void:
 	_unload_level()
 
 	_level = level_scene.instantiate()
+
+	#Las escobas compradas las pone el BroomSpawner del nivel, en su propio _ready().
+	#Esto solo avisa si se pagaron escobas y el nivel no tiene quien las ponga: la
+	#compra cobra magia igual, y una mejora que se cobra sin efecto es peor que un error.
+	_warn_if_brooms_have_nowhere_to_go(_level)
+
 	_level_container.add_child(_level)
 
 	var run_state: RunState = _find_run_state(_level)
@@ -154,6 +170,7 @@ func _load_level() -> void:
 
 	_hud.bind_run_state(run_state)
 
+
 	if print_events:
 		print("[Main] nivel cargado")
 
@@ -165,6 +182,40 @@ func _unload_level() -> void:
 	_level_container.remove_child(_level)
 	_level.queue_free()
 	_level = null
+
+
+# ═══════════════ ESCOBAS COMPRADAS ═══════════════
+
+
+#Red de seguridad, no lógica de spawn: quien pone las escobas es el BroomSpawner del
+#nivel. Existe porque el modo de fallar es silencioso — la tienda cobra la magia igual
+#y el jugador no ve ninguna escoba nueva ni ningún error.
+func _warn_if_brooms_have_nowhere_to_go(level: Node) -> void:
+	var bought: int = PlayerProgress.get_extra_brooms()
+
+	if bought <= 0:
+		return
+
+	if _find_broom_spawner(level) != null:
+		return
+
+	push_warning("Main: hay %d escoba(s) compradas pero el nivel no tiene ningún BroomSpawner. Nadie las va a poner." % bought)
+
+
+#Por TIPO y recursivo: el spawner puede colgar del nivel directamente o de un contenedor.
+func _find_broom_spawner(node: Node) -> BroomSpawner:
+	for child: Node in node.get_children():
+		var spawner: BroomSpawner = child as BroomSpawner
+
+		if spawner != null:
+			return spawner
+
+		var found: BroomSpawner = _find_broom_spawner(child)
+
+		if found != null:
+			return found
+
+	return null
 
 
 #Busca el RunState entre los hijos directos del nivel. Por TIPO y no por nombre: si
@@ -194,11 +245,36 @@ func _on_run_lost(magic: int) -> void:
 	_finish_run(false, magic)
 
 
+#Ganar termina la PARTIDA, no solo la run: magia y mejoras se borran, y lo que venga
+#después arranca de cero. Por eso el reset va acá y no en go_to_menu() ni en start_game(),
+#que también los usa el flujo de la tienda, donde el progreso tiene que sobrevivir.
+#
+#El reset va ANTES de cargar el nivel a propósito: RunState lee el tiempo comprado en su
+#_ready() y el BroomSpawner lee las escobas compradas. Reseteando después, la primera
+#ronda de la partida nueva arrancaría con las mejoras de la partida anterior.
+func _on_victory_play_again() -> void:
+	PlayerProgress.reset()
+	start_game()
+
+
+func _on_victory_menu() -> void:
+	PlayerProgress.reset()
+	go_to_menu()
+
+
 #Punto único de salida de una run, igual que _end_run() en RunState. Los dos finales
 #terminan en una pantalla con los mismos dos botones; lo único que cambia es cuál.
 func _finish_run(won: bool, magic: int) -> void:
+	music.fade_low()
 	_run_finished = true
 	get_tree().paused = true
+
+	#La magia se acredita acá y en ningún otro lado: es el único punto por el que pasan
+	#las dos salidas de una run. Se cobra también al perder, porque limpiar cuesta lo
+	#mismo se llegue o no al final.
+	#Reintentar el mismo nivel vuelve a pagar toda su magia. Farmear repitiendo es
+	#posible y hoy nada lo impide; para la jam se asume.
+	PlayerProgress.add_magic(magic)
 
 	if won:
 		var victory: VictoryScreen = _show_screen(victory_scene) as VictoryScreen
@@ -208,18 +284,25 @@ func _finish_run(won: bool, magic: int) -> void:
 			return
 
 		victory.show_magic(magic)
-		victory.play_again_pressed.connect(start_game)
-		victory.menu_pressed.connect(go_to_menu)
+
+		#Las DOS salidas de la victoria borran el progreso. No se conectan directo a
+		#start_game()/go_to_menu() como las de la tienda justamente por eso: ganar cierra
+		#la partida, perder la continúa.
+		victory.play_again_pressed.connect(_on_victory_play_again)
+		victory.menu_pressed.connect(_on_victory_menu)
 		return
 
-	var defeat: GameOverScreen = _show_screen(game_over_scene) as GameOverScreen
+	#Se acabó el tiempo. Ya no es una derrota seca: el jugador se lleva la magia que juntó
+	#y la gasta antes de la ronda siguiente.
+	#game_over_scene quedó sin uso por esto. No se borra: es escena del equipo.
+	var shop: ShopScreen = _show_screen(shop_scene) as ShopScreen
 
-	if defeat == null:
-		push_error("Main: game_over_scene está vacío, o su raíz no tiene el script game_over.gd.")
+	if shop == null:
+		push_error("Main: shop_scene está vacío, o su raíz no tiene el script shop.gd. Ojo que mejoras.tscn venía con game_over.gd puesto.")
 		return
-
-	#Reintentar recarga el mismo nivel; volver al título descarta la partida. Las dos
-	#despausan por su cuenta, en _load_level() y en go_to_menu().
-	defeat.play_again_pressed.connect(start_game)
-	defeat.menu_pressed.connect(go_to_menu)
-
+	#Seguir arranca una ronda NUEVA con el nivel completo, no la misma partida donde
+	#quedó: el nivel se reinstancia entero y con él su RunState. Las mejoras compradas
+	#son lo único que cruza de una ronda a la otra.
+	#Las dos salidas despausan por su cuenta, en _load_level() y en go_to_menu().
+	shop.continue_pressed.connect(start_game)
+	shop.menu_pressed.connect(go_to_menu)

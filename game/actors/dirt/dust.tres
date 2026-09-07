@@ -5,5 +5,6 @@
 
 [resource]
 script = ExtResource("1_gkbfw")
+magic_per_pass = 2
 texture = ExtResource("2_rmwhs")
 metadata/_custom_type_script = "uid://djb47w00qwqlm"
